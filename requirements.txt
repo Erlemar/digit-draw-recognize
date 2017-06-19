@@ -25,7 +25,6 @@ jupyter-core==4.3.0
 lxml==3.7.3
 MarkupSafe==0.23
 matplotlib==2.0.2
-numba==0.33.0
 numexpr==2.6.2
 numpy==1.12.1
 numpydoc==0.6.0
