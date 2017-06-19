@@ -1,6 +1,3 @@
-anaconda-client==1.6.3
-Anaconda-Fusion==1.0.0
-anaconda-navigator==1.4.3
 argcomplete==1.0.0
 astroid==1.4.9
 astropy==1.2.1
