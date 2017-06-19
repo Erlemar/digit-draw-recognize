@@ -34,7 +34,6 @@ pandas==0.20.1
 pandas-datareader==0.2.1
 pandasql==0.7.3
 partd==0.3.7
-path.py==0.0.0
 pathlib2==2.2.0
 patsy==0.4.1
 pep8==1.7.0
