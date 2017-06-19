@@ -25,13 +25,6 @@ jupyter-core==4.3.0
 lxml==3.7.3
 MarkupSafe==0.23
 matplotlib==2.0.2
-nb-anacondacloud==1.1.0
-nb-conda==1.1.0
-nb-conda-kernels==1.0.3
-nbconvert==4.2.0
-nbformat==4.2.0
-nbpresent==3.0.2
-notebook==5.0.0
 numba==0.33.0
 numexpr==2.6.2
 numpy==1.12.1
