@@ -1,2 +1,2 @@
-web: python demo.py
-web: gunicorn -b 0.0.0.0:$PORT app:app
+web: gunicorn gettingstarted.wsgi --log-file -
+web: python demo.py runserver 0.0.0.0:5000

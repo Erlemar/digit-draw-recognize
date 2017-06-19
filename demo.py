@@ -1,6 +1,6 @@
 __author__ = 'Artgor'
 import time
-print("Загрузка данных")
+print("Loading data")
 start_time = time.time()
 from sentiment_classifier import SentimentClassifier
 from codecs import open
@@ -15,10 +15,9 @@ from io import StringIO
 import os
 app = Flask(__name__)
 
-#print("Загрузка данных")
 #start_time = time.time()
 classifier = SentimentClassifier()
-print("Функционал готов к работе, загрузка заняла {0} секунд.".format(time.time() - start_time))
+print("Functionality is ready, loading took {0} seconds.".format(time.time() - start_time))
 
 @app.route("/", methods=["POST", "GET"])
 def index_page(text="", prediction_message=""):
@@ -61,3 +60,7 @@ def get_image():
 	print ('Image received: {}'.format(face.shape))
 	
 	return ''
+
+if __name__ == '__main__':
+	port = int(os.environ.get("PORT", 5000))
+	app.run(host='0.0.0.0', port=port, debug=False)
