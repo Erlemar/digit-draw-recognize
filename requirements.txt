@@ -63,7 +63,6 @@ python-dateutil==2.6.0
 python-rake==1.0.7
 pytz==2016.10
 PyWavelets==0.5.2
-pywin32==220
 regex==2017.4.5
 requests==2.14.2
 requests-file==1.4.1
