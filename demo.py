@@ -2,7 +2,7 @@ __author__ = 'Artgor'
 import time
 print("Loading data")
 start_time = time.time()
-from sentiment_classifier import SentimentClassifier
+#from sentiment_classifier import SentimentClassifier
 from codecs import open
 import time
 from flask import Flask, render_template, request
@@ -13,10 +13,15 @@ import base64
 import re
 from io import StringIO
 import os
+import uuid
+import boto
+import boto3
+from boto.s3.key import Key
+from boto.s3.connection import S3Connection
 app = Flask(__name__)
 
 #start_time = time.time()
-classifier = SentimentClassifier()
+#classifier = SentimentClassifier()
 print("Functionality is ready, loading took {0} seconds.".format(time.time() - start_time))
 
 @app.route("/", methods=["POST", "GET"])
@@ -48,17 +53,23 @@ def get_image():
 	image = base64.decodebytes(image_encoded.encode('utf-8'))
 	'digit1-O_n1'.split('n')
 	drawn_digit = request.values['digit']
-	images_with_digit = len([i for i in os.listdir('d:/_python/Python projects/final_demo_copy/images/') if 'digit' + str(drawn_digit) in i])
 	type = 'O'
-	filename = 'images/digit' + str(drawn_digit) + '-' + type + '_n' + str(images_with_digit) + '.jpg'
-	with open("hello.txt", "w") as f:
-		f.write(image_b64) 
-	with open(filename, 'wb') as f:
+	filename = 'digit' + str(drawn_digit) + '-' + type + str(uuid.uuid1()) + '.jpg'
+	with open('tmp/' + filename, 'wb') as f:
 		f.write(image)
-	face = misc.imread(filename)
 
-	print ('Image received: {}'.format(face.shape))
-	
+	REGION_HOST = 's3-external-1.amazonaws.com'
+	S3_BUCKET = os.environ.get('S3_BUCKET')
+	AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+	AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+	conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
+	bucket = conn.get_bucket('digit_draw_recognize')
+	k = Key(bucket)
+	key = filename
+	fn = 'tmp/' + filename
+	k.key = key
+	k.set_contents_from_filename(fn)
+	print('Done')
 	return ''
 
 if __name__ == '__main__':
