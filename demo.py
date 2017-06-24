@@ -63,8 +63,9 @@ def get_image():
 	AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 	AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 	#conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
-	conn = S3Connection(os.environ['S3_KEY'], os.environ['S3_SECRET'], host=REGION_HOST)
+	conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 	bucket = conn.get_bucket('digit_draw_recognize')
+	print(bucket, os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
 	k = Key(bucket)
 	key = filename
 	fn = 'tmp/' + filename
