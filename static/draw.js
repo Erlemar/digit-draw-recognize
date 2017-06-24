@@ -48,8 +48,8 @@ mousedown(event)
 {
     drawing = true;
     var location = getPosition(event);
-    context.lineWidth = 10.0;
-    context.strokeStyle="#F00000";
+    context.lineWidth = 8.0;
+    context.strokeStyle="#000000";
     context.beginPath();
     context.moveTo(location.x,location.y);
 }

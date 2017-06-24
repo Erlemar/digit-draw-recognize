@@ -59,10 +59,11 @@ def get_image():
 		f.write(image)
 
 	REGION_HOST = 's3-external-1.amazonaws.com'
-	S3_BUCKET = os.environ.get('S3_BUCKET')
+	#S3_BUCKET = os.environ.get('S3_BUCKET')
 	AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 	AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-	conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
+	#conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
+	conn = S3Connection(os.environ['S3_KEY'], os.environ['S3_SECRET'], host=REGION_HOST)
 	bucket = conn.get_bucket('digit_draw_recognize')
 	k = Key(bucket)
 	key = filename
