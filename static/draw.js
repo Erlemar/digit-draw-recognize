@@ -160,11 +160,12 @@ function saveImg1()
 	  data:{
 		imageBase64: dataURL,
 		digit: dig
-	  }
-	}).done(function() {
-	  console.log('sent');
+		}
+	}).done(function(response) {
+	  console.log(response)
+	  document.getElementById("rec_result").innerHTML = response
 	});
-	document.getElementById("rec_result").innerHTML = "Image saved";
+	
 }
 
 
