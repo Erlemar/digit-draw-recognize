@@ -61,8 +61,8 @@ def get_image():
 
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		#S3_BUCKET = os.environ.get('S3_BUCKET')
-		AWS_ACCESS_KEY_ID = os.environ.['AWS_ACCESS_KEY_ID']
-		AWS_SECRET_ACCESS_KEY = os.environ.['AWS_SECRET_ACCESS_KEY']
+		AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']
+		AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
 	return AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 
 
