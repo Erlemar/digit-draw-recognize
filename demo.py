@@ -63,19 +63,8 @@ def get_image():
 		#S3_BUCKET = os.environ.get('S3_BUCKET')
 		AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 		AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-		return AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
-		#conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
-		#conn = S3Connection('AKIAIRXR5PJRWK6YVZMA', 'hKjhSC6Rtqvkww4JcgQOfVfQLocGm8GBUEEWgtmc', host=REGION_HOST)
-		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket('digit_draw_recognize')
-		#print(bucket, os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
-		k = Key(bucket)
-		key = filename
-		fn = 'tmp/' + filename
-		k.key = key
-		k.set_contents_from_filename(fn)
-		print('Done')
-	return filename
+	return AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+
 
 if __name__ == '__main__':
 	port = int(os.environ.get("PORT", 5000))
