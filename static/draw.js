@@ -156,8 +156,11 @@ function saveImg1()
 	var dig = document.querySelector('input[name="action"]:checked').value;
 	$.ajax({
 	  type: "POST",
-	  url: "process.py",
-	  data: {imageBase64: dataURL, digit: dig}
+	  url: "http://127.0.0.1:5000/hook",
+	  data:{
+		imageBase64: dataURL,
+		digit: dig
+		}
 	}).done(function(response) {
 	  console.log(response)
 	  document.getElementById("rec_result").innerHTML = response
