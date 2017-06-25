@@ -58,6 +58,8 @@ def index_page(text="", prediction_message=""):
 #@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def get_image():
 	#request.headers.add('Access-Control-Allow-Origin', '*')
+	print(check)
+	return '2'
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
 		image_encoded = image_b64.split(',')[1]
