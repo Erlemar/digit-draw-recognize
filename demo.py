@@ -19,20 +19,21 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from datetime import timedelta
-from flask import make_response, request, current_app
+from flask.ext.cors import CORS, cross_origin
 from functools import update_wrapper
 app = Flask(__name__)
 #start_time = time.time()
 #classifier = SentimentClassifier()
 print("Functionality is ready, loading took {0} seconds.".format(time.time() - start_time))
 
+#CORS_HEADERS = 'Content-Type'
 
-from flask_cors import CORS
-CORS(app)
+#cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:port"}})
 
 @app.route("/", methods=["POST", "GET"])
-#@crossdomain(origin='*')
+#@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def index_page(text="", prediction_message=""):
+	response.headers.add('Access-Control-Allow-Origin', '*')
 	if request.method == "POST":
 		text = request.form["text"]
 		logfile = open("demo_logs.txt", "a", "utf-8")
@@ -54,8 +55,9 @@ def index_page(text="", prediction_message=""):
 	return render_template('hello.html', text=text, prediction_message=prediction_message)
 
 @app.route('/hook', methods = ["GET", "POST"])
-#@crossdomain(origin='*')
+#@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def get_image():
+	response.headers.add('Access-Control-Allow-Origin', '*')
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
 		image_encoded = image_b64.split(',')[1]
