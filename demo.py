@@ -27,52 +27,11 @@ app = Flask(__name__)
 print("Functionality is ready, loading took {0} seconds.".format(time.time() - start_time))
 
 
-
-
-def crossdomain(origin=None, methods=None, headers=None,
-                max_age=21600, attach_to_all=True,
-                automatic_options=True):
-    if methods is not None:
-        methods = ', '.join(sorted(x.upper() for x in methods))
-    if headers is not None and not isinstance(headers, str):
-        headers = ', '.join(x.upper() for x in headers)
-    if not isinstance(origin, str):
-        origin = ', '.join(origin)
-    if isinstance(max_age, timedelta):
-        max_age = max_age.total_seconds()
-
-    def get_methods():
-        if methods is not None:
-            return methods
-
-        options_resp = current_app.make_default_options_response()
-        return options_resp.headers['allow']
-
-    def decorator(f):
-        def wrapped_function(*args, **kwargs):
-            if automatic_options and request.method == 'OPTIONS':
-                resp = current_app.make_default_options_response()
-            else:
-                resp = make_response(f(*args, **kwargs))
-            if not attach_to_all and request.method != 'OPTIONS':
-                return resp
-
-            h = resp.headers
-
-            h['Access-Control-Allow-Origin'] = origin
-            h['Access-Control-Allow-Methods'] = get_methods()
-            h['Access-Control-Max-Age'] = str(max_age)
-            if headers is not None:
-                h['Access-Control-Allow-Headers'] = headers
-            return resp
-
-        f.provide_automatic_options = False
-        return update_wrapper(wrapped_function, f)
-    return decorator
-
+from flask_cors import CORS
+CORS(app)
 
 @app.route("/", methods=["POST", "GET"])
-@crossdomain(origin='*')
+#@crossdomain(origin='*')
 def index_page(text="", prediction_message=""):
 	if request.method == "POST":
 		text = request.form["text"]
@@ -95,7 +54,7 @@ def index_page(text="", prediction_message=""):
 	return render_template('hello.html', text=text, prediction_message=prediction_message)
 
 @app.route('/hook', methods = ["GET", "POST"])
-@crossdomain(origin='*')
+#@crossdomain(origin='*')
 def get_image():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
