@@ -31,7 +31,7 @@ print("Functionality is ready, loading took {0} seconds.".format(time.time() - s
 #cors = CORS(app, resources={r"/hook": {"origins": "*"})
 CORS(app, headers=['Content-Type'])
 @app.route("/", methods=["POST", "GET", 'OPTIONS'])
-@cross_origin(origins='*')
+@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
 def index_page(text="", prediction_message=""):
 	#request.headers.add('Access-Control-Allow-Origin', '*')
 	if request.method == "POST":
@@ -55,7 +55,7 @@ def index_page(text="", prediction_message=""):
 	return render_template('hello.html', text=text, prediction_message=prediction_message)
 
 @app.route('/hook', methods = ["GET", "POST", 'OPTIONS'])
-@cross_origin(origins='*')
+@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
 def get_image():
 	#request.headers.add('Access-Control-Allow-Origin', '*')
 
