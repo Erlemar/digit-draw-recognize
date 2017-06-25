@@ -29,7 +29,7 @@ print("Functionality is ready, loading took {0} seconds.".format(time.time() - s
 #CORS_HEADERS = 'Content-Type'
 
 #cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:port"}})
-CORS(app, headers=['Content-Type'])
+#CORS(app, headers=['Content-Type'])
 @app.route("/", methods=["POST", "GET"])
 #@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def index_page(text="", prediction_message=""):
@@ -58,10 +58,10 @@ def index_page(text="", prediction_message=""):
 #@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def get_image():
 	#request.headers.add('Access-Control-Allow-Origin', '*')
-	print(check)
-	return '2'
+
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
+		print('check')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))
 		'digit1-O_n1'.split('n')
@@ -70,15 +70,14 @@ def get_image():
 		filename = 'digit' + str(drawn_digit) + '-' + type + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
-
+		print('image written')
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		#S3_BUCKET = os.environ.get('S3_BUCKET')
 		#AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 		#AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 		#return AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
 		#conn = S3Connection(AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, host=REGION_HOST)
-		conn = S3Connection('AKIAIRXR5PJRWK6YVZMA', 'hKjhSC6Rtqvkww4JcgQOfVfQLocGm8GBUEEWgtmc', host=REGION_HOST)
-		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
 		#print(bucket, os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
