@@ -28,8 +28,8 @@ print("Functionality is ready, loading took {0} seconds.".format(time.time() - s
 
 #CORS_HEADERS = 'Content-Type'
 
-#cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:port"}})
-#CORS(app, headers=['Content-Type'])
+#cors = CORS(app, resources={r"/hook": {"origins": "*"})
+CORS(app, headers=['Content-Type'])
 @app.route("/", methods=["POST", "GET"])
 #@cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def index_page(text="", prediction_message=""):
