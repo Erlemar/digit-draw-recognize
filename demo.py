@@ -19,7 +19,7 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from datetime import timedelta
-from flask.ext.cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from functools import update_wrapper
 app = Flask(__name__)
 #start_time = time.time()
