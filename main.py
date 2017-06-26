@@ -46,7 +46,7 @@ def get_image():
 		save = model.save_image(drawn_digit, image)	
 
 		print('Done')
-	return filename
+	return save
 
 if __name__ == '__main__':
 	port = int(os.environ.get("PORT", 5000))
