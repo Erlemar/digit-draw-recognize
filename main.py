@@ -48,7 +48,7 @@ def get_image():
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
 		
-				print('Image written')
+		print('Image written')
 		
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
