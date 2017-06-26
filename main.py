@@ -43,10 +43,25 @@ def get_image():
 		print('Data received')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))		
-		save = model.save_image(drawn_digit, image)	
-
-		print(save)
-	return save
+		#save = model.save_image(drawn_digit, image)	
+		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
+		with open('tmp/' + filename, 'wb') as f:
+			f.write(image)
+		
+				print('Image written')
+		
+		REGION_HOST = 's3-external-1.amazonaws.com'
+		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		bucket = conn.get_bucket('digit_draw_recognize')
+		
+		k = Key(bucket)
+		fn = 'tmp/' + filename
+		k.key = filename
+		k.set_contents_from_filename(fn)
+		print('Done')
+		
+		print(filename)
+	return filename
 
 if __name__ == '__main__':
 	port = int(os.environ.get("PORT", 5000))
