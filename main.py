@@ -39,29 +39,13 @@ def index_page(text="", prediction_message=""):
 def get_image():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
-		print('check')
-		image_encoded = image_b64.split(',')[1]
-		image = base64.decodebytes(image_encoded.encode('utf-8'))
-		'digit1-O_n1'.split('n')
 		drawn_digit = request.values['digit']
-		type = 'O'
-		filename = 'digit' + str(drawn_digit) + '-' + type + str(uuid.uuid1()) + '.jpg'
-		print(filename)
-		with open('tmp/' + filename, 'wb') as f:
-			f.write(image)
+		print('Data received')
+		image_encoded = image_b64.split(',')[1]
+		image = base64.decodebytes(image_encoded.encode('utf-8'))		
+		save = model.save_image(drawn_digit, image)	
 
-		
-		REGION_HOST = 's3-external-1.amazonaws.com'
-		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket('digit_draw_recognize')
-		
-		k = Key(bucket)
-		fn = 'tmp/' + filename
-		k.key = filename
-		k.set_contents_from_filename(fn)
 		print('Done')
-		
-		print(filename)
 	return filename
 
 if __name__ == '__main__':
