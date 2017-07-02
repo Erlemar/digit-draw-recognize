@@ -168,7 +168,23 @@ function saveImg1()
 	
 }
 
-
+function predict()
+{
+	document.getElementById("rec_result").innerHTML = "";
+	var canvas = document.getElementById("the_stage");
+	var dataURL = canvas.toDataURL('image/jpg');
+	$.ajax({
+	  type: "POST",
+	  url: "/hook2",
+	  data:{
+		imageBase64: dataURL
+		}
+	}).done(function(response) {
+	  console.log(response)
+	  document.getElementById("rec_result").innerHTML = response
+	});
+	
+}
 
 
 
