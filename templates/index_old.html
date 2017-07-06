@@ -1,0 +1,51 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>Handwritten digit recognition</title>
+	<form action="{{ url_for('index_page') }}" method=post>
+	<link rel="stylesheet" type="text/css" href="static/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="static/style.css">
+</head>
+
+	<body>
+
+		<div  class="container">
+			<div>
+				Здесь можно порисовать.<br>
+				<canvas id="the_stage" width="200" height="200">fsf</canvas>
+				<div>
+					<button type="button" class="btn btn-default butt" onclick="clearCanvas()"><strong>clear</strong></button>
+					<button type="button" class="btn btn-default butt" id="save" onclick="saveImg1()"><strong>save</strong></button>
+					<button type="button" class="btn btn-default butt" id="pred" onclick="predict()"><strong>Predict</strong></button>
+				</div>
+
+				<div>
+					Please select one of the following<br>
+					<input type="radio" name="action" value="0" id="digit" checked="checked">0<br>
+					<input type="radio" name="action" value="1" id="digit">1<br>
+					<input type="radio" name="action" value="2" id="digit">2<br>
+					<input type="radio" name="action" value="3" id="digit">3<br>
+					<input type="radio" name="action" value="4" id="digit">4<br>
+					<input type="radio" name="action" value="5" id="digit">5<br>
+					<input type="radio" name="action" value="6" id="digit">6<br>
+					<input type="radio" name="action" value="7" id="digit">7<br>
+					<input type="radio" name="action" value="8" id="digit">8<br>
+					<input type="radio" name="action" value="9" id="digit">9<br>
+				</div>
+			</div>
+
+
+
+
+
+			<div class="col-md-6 column">
+				<h3>result:</h3>
+				<h2 id="rec_result"></h2>
+			</div>
+		</div>
+		<script src="static/jquery.min.js"></script>
+		<script src="static/bootstrap.min.js"></script>
+		<script src="static/draw.js"></script>
+	</body>
+</html>

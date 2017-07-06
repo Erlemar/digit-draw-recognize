@@ -6,6 +6,17 @@ var offset_left = 0;
 var offset_top = 0;
 
 
+function hide_show() {
+    var x = document.getElementById('hidable');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+		document.getElementById("hide_show_btn").innerHTML = 'Hide additional information'
+    } else {
+        x.style.display = 'none';
+		document.getElementById("hide_show_btn").innerHTML = 'Show additional information'
+    }
+}
+
 function start_canvas ()
 {
     var canvas = document.getElementById ("the_stage");

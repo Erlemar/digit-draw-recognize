@@ -18,7 +18,7 @@ from neural_net import TwoLayerNet
 
 class Model(object):
 	def __init__(self):
-		self.params = np.load('models/temp.npy')[()]
+		self.params = np.load('models/original_weights.npy')[()]
 		self.nothing = 0
 
 	def save_image(self, drawn_digit, image):
@@ -73,4 +73,4 @@ class Model(object):
 
 		prediction = net.predict_single(img_array)
 
-		return str(prediction)
+		return prediction

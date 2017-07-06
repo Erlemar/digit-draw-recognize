@@ -35,9 +35,9 @@ class TwoLayerNet(object):
 		- output_size: The number of classes C.
 		"""
 		self.params = {}
-		self.params['W1'] = std * np.random.randn(input_size, hidden_size)
+		self.params['W1'] = ((2 / input_size) ** 0.5) * np.random.randn(input_size, hidden_size)
 		self.params['b1'] = np.zeros(hidden_size)
-		self.params['W2'] = std * np.random.randn(hidden_size, output_size)
+		self.params['W2'] = ((2 / hidden_size) ** 0.5) * np.random.randn(hidden_size, output_size)
 		self.params['b2'] = np.zeros(output_size)
 
 	def loss(self, X, y=None, reg=0.0):
@@ -210,6 +210,8 @@ class TwoLayerNet(object):
 		l2 = l1.dot(self.params['W2']) + self.params['b2']
 		exp_scores = np.exp(l2)
 		y_pred = np.argmax(exp_scores)
-
-		return y_pred
-
+		print(np.round(exp_scores / np.sum(exp_scores), 2), exp_scores[np.argmax(exp_scores)])
+		if exp_scores[np.argmax(exp_scores)] < 30:
+			return ('Do you even draw, bro? This is hardly a digit!')
+		else:
+			return str(y_pred)

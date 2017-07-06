@@ -10,15 +10,47 @@ body
 {
 	border:1px solid #999;
     border-radius: 4px;
-    /*box-shadow: -10px 10px 5px #888888;*/
+	padding: 0;
+    margin: auto;
+    display: block;
+}
+#pred_text
+{
+	font-weight: bold;
+	font-size: 200%;
+}
+#rec_result
+{
+	margin: 0px 30px 0px 30px;
+	font-size: 200%;
+}
+
+#hide_show_btn
+{
+	position: absolute;
+	width: 210px;
+	right: 0px;
+}
+#button
+{
+
+	padding: 0;
+    margin-left: auto;
 }
 .butt
 {
-    margin: 10px 20px 20px 0;
-    width: 100px;
+    margin: 0px 10px 0px 10px;
+    width: 90px;
     font-size: 16px;
 }
 p
 {
     font-size: 16px;
+}
+#my_column
+{
+	position:relative;
+	padding: 0;
+    margin: auto;
+    display: block;
 }

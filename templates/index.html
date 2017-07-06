@@ -1,51 +1,205 @@
-﻿<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
-	<meta charset="utf-8" />
-	<title>Handwritten digit recognition</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Handwritten digit recognition</title>
 	<form action="{{ url_for('index_page') }}" method=post>
-	<link rel="stylesheet" type="text/css" href="static/bootstrap.min.css">
+    <!-- Bootstrap Core CSS -->
+    <link href="static/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="static/small-business.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="static/style.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 
-	<body>
+<body>
 
-		<div  class="container">
-			<div>
-				Здесь можно порисовать.<br>
-				<canvas id="the_stage" width="200" height="200">fsf</canvas>
-				<div>
-					<button type="button" class="btn btn-default butt" onclick="clearCanvas()"><strong>clear</strong></button>
-					<button type="button" class="btn btn-default butt" id="save" onclick="saveImg1()"><strong>save</strong></button>
-					<button type="button" class="btn btn-default butt" id="pred" onclick="predict()"><strong>Predict</strong></button>
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">
+                    <img src="http://placehold.it/150x50&text=Logo" alt="">
+                </a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">About the project</a>
+                    </li>
+                    <li>
+                        <a href="#">Project description</a>
+                    </li>
+                    <li>
+                        <a href="#">Models</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <!-- Heading Row -->
+        <div class="row clearfix">
+            <div class="col-md-3" align="center">
+				<div style="position: relative;">
+					<canvas id="the_stage" width="200" height="200" align="center">Canvas</canvas><br>
+					</div>
+				<div style="position: relative;">
+					<button type="button" class="btn btn-default butt" onclick="clearCanvas()" align="center"><strong>Clear</strong></button>
+					<button type="button" class="btn btn-default butt" id="pred" onclick="predict()" align="center"><strong>Predict</strong></button>
+					</div>
+            </div>
+
+            <!-- /.col-md-8 -->
+            <div class="col-md-8">
+				<span id="pred_text">Prediction result:</span> <span id="rec_result"> </span>
+				<button type="button" class="btn btn-default butt" onclick="hide_show()" id="hide_show_btn">Show more information</button>
+				<div class="container" id="hidable" style="display: none;">
+					<div class="row">
+						<div class="col-md-9">
+							<table class="table">
+								<thead>
+									<tr>
+										<th>
+											Column heading
+										</th>
+										<th>
+											Column heading
+										</th>
+										<th>
+											Column heading
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="active">
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+									</tr>
+									<tr class="success">
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+										<td>
+											Column content
+										</td>
+									</tr>
+									
+								</tbody>
+							</table>
+						</div>
+					</div>
 				</div>
+                <p>Maybe some additional text</p>
+            </div>
+            <!-- /.col-md-4 -->
+        </div>
+        <!-- /.row -->
 
-				<div>
-					Please select one of the following<br>
-					<input type="radio" name="action" value="0" id="digit" checked="checked">0<br>
-					<input type="radio" name="action" value="1" id="digit">1<br>
-					<input type="radio" name="action" value="2" id="digit">2<br>
-					<input type="radio" name="action" value="3" id="digit">3<br>
-					<input type="radio" name="action" value="4" id="digit">4<br>
-					<input type="radio" name="action" value="5" id="digit">5<br>
-					<input type="radio" name="action" value="6" id="digit">6<br>
-					<input type="radio" name="action" value="7" id="digit">7<br>
-					<input type="radio" name="action" value="8" id="digit">8<br>
-					<input type="radio" name="action" value="9" id="digit">9<br>
-				</div>
-			</div>
+        <hr>
 
+        <!-- Call to Action Well -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="well">
+                    <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit to train the models</label>
+					
+                </div>
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
 
+        <!-- Content Row -->
+        <div class="row">
+            <div class="col-md-4">
+                <h2>Heading 1</h2>
+                <p>There is app description here</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Heading 2</h2>
+                <p>About checkbox</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+            <div class="col-md-4">
+                <h2>Heading 3</h2>
+                <p>Number input and final message here</p>
+                <a class="btn btn-default" href="#">More Info</a>
+            </div>
+            <!-- /.col-md-4 -->
+        </div>
+        <!-- /.row -->
 
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Github link here</p>
+                </div>
+            </div>
+        </footer>
 
+    </div>
+    <!-- /.container -->
 
-			<div class="col-md-6 column">
-				<h3>result:</h3>
-				<h2 id="rec_result"></h2>
-			</div>
-		</div>
-		<script src="static/jquery.min.js"></script>
-		<script src="static/bootstrap.min.js"></script>
-		<script src="static/draw.js"></script>
-	</body>
+    <!-- jQuery -->
+    <script src="static/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="static/bootstrap.min.js"></script>
+	<script src="static/draw.js"></script>
+</body>
+
 </html>

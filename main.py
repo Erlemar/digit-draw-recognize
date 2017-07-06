@@ -36,7 +36,7 @@ def get_image():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
 		drawn_digit = request.values['digit']
-		print('Data received')
+		#print('Data received')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))		
 		save = model.save_image(drawn_digit, image)	
@@ -48,7 +48,7 @@ def get_image():
 def predict():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
-		print('Sending data to script')
+		#print('Sending data to script')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))		
 		prediction = model.predict(image)	
