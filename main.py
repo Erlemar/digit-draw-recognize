@@ -29,7 +29,7 @@ CORS(app, headers=['Content-Type'])
 def index_page(text="", prediction_message=""):
 
 	return render_template('index.html', text=text, prediction_message=prediction_message)
-
+'''
 @app.route('/hook', methods = ["GET", "POST", 'OPTIONS'])
 #@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
 def get_image():
@@ -42,7 +42,7 @@ def get_image():
 		save = model.save_image(drawn_digit, image)	
 
 	return save
-	
+'''
 @app.route('/hook2', methods = ["GET", "POST", 'OPTIONS'])
 #@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
 def predict():
@@ -54,6 +54,19 @@ def predict():
 		prediction = model.predict(image)	
 
 	return prediction
+	
+@app.route('/hook3', methods = ["GET", "POST", 'OPTIONS'])
+#@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
+def train():
+	if request.method == 'POST':
+		image_b64 = request.values['imageBase64']
+		#print('Sending data to script')
+		image_encoded = image_b64.split(',')[1]
+		image = base64.decodebytes(image_encoded.encode('utf-8'))
+		digit = request.values['digit']
+		answer = model.train(image, digit)	
+
+	return answer
 	
 if __name__ == '__main__':
 	port = int(os.environ.get("PORT", 5000))

@@ -15,29 +15,14 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 from neural_net import TwoLayerNet
+from two_layer_net import net as tln2
 
 class Model(object):
 	def __init__(self):
-		self.params = np.load('models/original_weights.npy')[()]
+		self.params = np.load('models/updated_weights.npy')[()]
 		self.nothing = 0
 
-	def save_image(self, drawn_digit, image):
-		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
-		with open('tmp/' + filename, 'wb') as f:
-			f.write(image)
-			
-		REGION_HOST = 's3-external-1.amazonaws.com'
-		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket('digit_draw_recognize')
-		
-		k = Key(bucket)
-		fn = 'tmp/' + filename
-		k.key = filename
-		k.set_contents_from_filename(fn)
-		
-		return ('Image saved successfully with the name {0}'.format(filename))
-	
-	def predict(self, image):
+	def process_image(self, image):
 		filename = 'digit' +  '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
@@ -64,13 +49,36 @@ class Model(object):
 
 		imgdata = list(smallImg.getdata())
 		img_array = np.array([(255.0 - x) / 255.0 for x in imgdata])
-
-		input_size = 28 * 28
-		hidden_size = 20
-		num_classes = 10
-		net = TwoLayerNet(input_size, hidden_size, num_classes)
-		net.params = self.params
+		return img_array
+	
+	def save_image(self, drawn_digit, image):
+		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
+		with open('tmp/' + filename, 'wb') as f:
+			f.write(image)
+			
+		REGION_HOST = 's3-external-1.amazonaws.com'
+		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		bucket = conn.get_bucket('digit_draw_recognize')
+		
+		k = Key(bucket)
+		fn = 'tmp/' + filename
+		k.key = filename
+		k.set_contents_from_filename(fn)
+		
+		return ('Image saved successfully with the name {0}'.format(filename))
+	
+	def predict(self, image):
+		img_array = self.process_image(image)
+		net = tln2(self.params, input_size=28*28, hidden_size=100, output_size=10)
+		#net.params = self.params
 
 		prediction = net.predict_single(img_array)
-
 		return prediction
+		
+	def train(self, image, digit):
+		net = tln2(self.params, input_size=28*28, hidden_size=100, output_size=10)
+		X = self.process_image(image)
+		y = np.array(int(digit))
+		net.train(X, y)
+		np.save('models/updated_weights.npy', net.params)
+		return 'ok'

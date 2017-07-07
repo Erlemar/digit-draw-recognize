@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,15 +10,11 @@
 
     <title>Handwritten digit recognition</title>
 	<form action="{{ url_for('index_page') }}" method=post>
-    <!-- Bootstrap Core CSS -->
     <link href="static/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
     <link href="static/small-business.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="static/style.css">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -28,11 +23,8 @@
 </head>
 
 <body>
-
-    <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span>
@@ -44,7 +36,6 @@
                     <img src="http://placehold.it/150x50&text=Logo" alt="">
                 </a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
@@ -58,33 +49,30 @@
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
 
-    <!-- Page Content -->
     <div class="container">
 
-        <!-- Heading Row -->
         <div class="row clearfix">
             <div class="col-md-3" align="center">
 				<div style="position: relative;">
 					<canvas id="the_stage" width="200" height="200" align="center">Canvas</canvas><br>
 					</div>
 				<div style="position: relative;">
-					<button type="button" class="btn btn-default butt" onclick="clearCanvas()" align="center"><strong>Clear</strong></button>
-					<button type="button" class="btn btn-default butt" id="pred" onclick="predict()" align="center"><strong>Predict</strong></button>
+					<button type="button" class="btn btn-default butt" onclick="clearCanvas()" align="center">Clear</button>
+					<button type="button" class="btn btn-default butt" id="pred" onclick="predict()" align="center">Predict</button>
 					</div>
             </div>
 
-            <!-- /.col-md-8 -->
-            <div class="col-md-8">
-				<span id="pred_text">Prediction result:</span> <span id="rec_result"> </span>
-				<button type="button" class="btn btn-default butt" onclick="hide_show()" id="hide_show_btn">Show more information</button>
+            <div class="col-md-7">
+				<div class="row clearfix" id="pr">
+					<div><span id="pred_text">Prediction result:</span> <span id="rec_result"> </span></div>
+					<div><button type="button" class="btn btn-default butt" onclick="hide_show()" id="hide_show_btn" style="display: none;">Show detailed information</button></div>
+				</div>
 				<div class="container" id="hidable" style="display: none;">
-					<div class="row">
-						<div class="col-md-9">
+					<div>
+						<div class="col-md-7">
 							<table class="table">
 								<thead>
 									<tr>
@@ -100,7 +88,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr class="active">
+									<tr>
 										<td>
 											Column content
 										</td>
@@ -122,7 +110,7 @@
 											Column content
 										</td>
 									</tr>
-									<tr class="success">
+									<tr>
 										<td>
 											Column content
 										</td>
@@ -139,50 +127,58 @@
 						</div>
 					</div>
 				</div>
-                <p>Maybe some additional text</p>
+				<div class="row clearfix">
+					<div id="prediction" style="display: none;">
+						<span id="question">Is the prediction correct?</span>
+						<button type="button" class="btn btn-default butt" id="yes" onclick="positive_pred()">Yes</button>
+						<button type="button" class="btn btn-default butt" id="no" onclick="negative_pred()">No</button>
+					</div>
+					<span id="answer_reaction"> </span>
+					<div id="digit_form" style="display: none;">
+						<select id="digits">
+							<option value="0">0</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="7">7</option>
+							<option value="8">8</option>
+							<option value="9">9</option>
+						</select>
+						<button type="button" class="btn btn-default butt" onclick="submit_correct_digit()">Confirm</button>
+					</div>
+				</div>
+
             </div>
-            <!-- /.col-md-4 -->
         </div>
-        <!-- /.row -->
 
         <hr>
 
-        <!-- Call to Action Well -->
         <div class="row">
             <div class="col-lg-12">
                 <div class="well">
-                    <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit to train the models</label>
-					
+                    <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>
                 </div>
             </div>
-            <!-- /.col-lg-12 -->
         </div>
-        <!-- /.row -->
 
-        <!-- Content Row -->
         <div class="row">
             <div class="col-md-4">
-                <h2>Heading 1</h2>
-                <p>There is app description here</p>
-                <a class="btn btn-default" href="#">More Info</a>
+                <h2>About the app</h2>
+                <p>This is an app for recognizing drawn digits. Draw a digit on the canvas and press the button "Recognize" to see the prediction. Press button "Clear" to clear the canvas and draw the digit again. Pressing button "Show more information" unhides a table with predictions done by several models.</p>
             </div>
-            <!-- /.col-md-4 -->
             <div class="col-md-4">
-                <h2>Heading 2</h2>
-                <p>About checkbox</p>
-                <a class="btn btn-default" href="#">More Info</a>
+                <h2>Collecting the data</h2>
+                <p>The drawn image is saved in temporary folder which is emptied after the end of the session. By default the drawn image is used to improve the quality of predictions by models. If you don't want this, uncheck the relevent flag. No more information is collected.</p>
             </div>
-            <!-- /.col-md-4 -->
             <div class="col-md-4">
-                <h2>Heading 3</h2>
-                <p>Number input and final message here</p>
-                <a class="btn btn-default" href="#">More Info</a>
+                <h2>Additional information</h2>
+                <p>If you want to know more about this project, press one of the links at the top of the screen (or use navigation bar on mobile). There is also direct link to Github at the bottom of the page.</p>
             </div>
-            <!-- /.col-md-4 -->
         </div>
-        <!-- /.row -->
 
-        <!-- Footer -->
         <footer>
             <div class="row">
                 <div class="col-lg-12">
@@ -192,12 +188,7 @@
         </footer>
 
     </div>
-    <!-- /.container -->
-
-    <!-- jQuery -->
     <script src="static/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
     <script src="static/bootstrap.min.js"></script>
 	<script src="static/draw.js"></script>
 </body>
