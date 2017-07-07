@@ -25,11 +25,18 @@ body
 	font-size: 200%;
 }
 
+#question
+{
+	position: relative;
+	font-size: 140%;
+}
+
 #hide_show_btn
 {
 	position: absolute;
 	width: 210px;
 	right: 0px;
+	top: 0px;
 }
 #button
 {
