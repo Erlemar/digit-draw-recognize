@@ -53,8 +53,7 @@ class Model(object):
 		return img_array
 	
 	def load_weights_amazon(self, filename):
-		#s3 = boto3.client('s3', os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
-		s3 = boto3.client('s3', aws_access_key_id='AKIAIVWQALPOXJLPHTMA', aws_secret_access_key='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')
+		s3 = boto3.client('s3', os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
 		s3.download_file('digit_draw_recognize', filename, os.path.join('tmp/', filename))
 		return np.load(os.path.join('tmp/', filename))[()]
 	
@@ -63,8 +62,7 @@ class Model(object):
 		#	f.write(file)
 		np.save(os.path.join('tmp/', filename), file)
 		REGION_HOST = 's3-external-1.amazonaws.com'
-		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		conn = S3Connection('AKIAIVWQALPOXJLPHTMA', '/OGqTcMC0szAKzGGVk/BporprA2BB5HluoQyfLLv', host=REGION_HOST)
+		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
 		k = Key(bucket)
 		fn = 'tmp/' + filename
@@ -79,8 +77,7 @@ class Model(object):
 			f.write(image)
 			
 		REGION_HOST = 's3-external-1.amazonaws.com'
-		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		conn = S3Connection('AKIAIVWQALPOXJLPHTMA', '/OGqTcMC0szAKzGGVk/BporprA2BB5HluoQyfLLv', host=REGION_HOST)
+		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
 		
 		k = Key(bucket)
