@@ -90,7 +90,7 @@ class net(object):
 
 		return grads
 
-	def train(self, X, y, learning_rate=0.095, reg=0.001, batch_size=24):
+	def train(self, X, y, learning_rate=0.1*(0.95**24) / 8, reg=0.001, batch_size=24):
 		"""
 		Train this neural network using stochastic gradient descent.
 

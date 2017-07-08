@@ -19,7 +19,8 @@ from two_layer_net import net as tln2
 
 class Model(object):
 	def __init__(self):
-		self.params = np.load('models/updated_weights.npy')[()]
+		#self.params = np.load('models/updated_weights.npy')[()]
+		self.params = self.load_weights_amazon('updated_weights.npy')
 		self.nothing = 0
 
 	def process_image(self, image):
@@ -51,13 +52,35 @@ class Model(object):
 		img_array = np.array([(255.0 - x) / 255.0 for x in imgdata])
 		return img_array
 	
+	def load_weights_amazon(self, filename):
+		#s3 = boto3.client('s3', os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
+		s3 = boto3.client('s3', aws_access_key_id='AKIAIVWQALPOXJLPHTMA', aws_secret_access_key='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')
+		s3.download_file('digit_draw_recognize', filename, os.path.join('tmp/', filename))
+		return np.load(os.path.join('tmp/', filename))[()]
+	
+	def save_weights_amazon(self, filename, file):
+		#with open('tmp/' + filename, 'wb') as f:
+		#	f.write(file)
+		np.save(os.path.join('tmp/', filename), file)
+		REGION_HOST = 's3-external-1.amazonaws.com'
+		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		conn = S3Connection('AKIAIVWQALPOXJLPHTMA', '/OGqTcMC0szAKzGGVk/BporprA2BB5HluoQyfLLv', host=REGION_HOST)
+		bucket = conn.get_bucket('digit_draw_recognize')
+		k = Key(bucket)
+		fn = 'tmp/' + filename
+		k.key = filename
+		k.set_contents_from_filename(fn)
+		
+		return ('Weights saved')
+	
 	def save_image(self, drawn_digit, image):
 		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
 			
 		REGION_HOST = 's3-external-1.amazonaws.com'
-		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		#conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
+		conn = S3Connection('AKIAIVWQALPOXJLPHTMA', '/OGqTcMC0szAKzGGVk/BporprA2BB5HluoQyfLLv', host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
 		
 		k = Key(bucket)
@@ -80,5 +103,6 @@ class Model(object):
 		X = self.process_image(image)
 		y = np.array(int(digit))
 		net.train(X, y)
-		np.save('models/updated_weights.npy', net.params)
-		return 'ok'
+		response = self.save_weights_amazon('updated_weights.npy', net.params)
+		#np.save('models/updated_weights.npy', net.params)
+		return response

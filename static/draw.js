@@ -126,6 +126,7 @@ function negative_pred() {
 
 
 function predict() {
+	document.getElementById("rec_result").innerHTML = "";
 	document.getElementById("prediction").style.display = "block";
     document.getElementById("hide_show_btn").style.display = 'block';
     document.getElementById("answer_reaction").innerHTML = "";
