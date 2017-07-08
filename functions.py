@@ -1,13 +1,13 @@
 __author__ = 'Artgor'
-from sklearn.externals import joblib
+#from sklearn.externals import joblib
 
 from codecs import open
-from scipy import misc
+#from scipy import misc
 import numpy as np
 from PIL import Image
 import base64
-import re
-from io import StringIO
+#import re
+#from io import StringIO
 import os
 import uuid
 import boto
