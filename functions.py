@@ -53,7 +53,7 @@ class Model(object):
 		return img_array
 	
 	def load_weights_amazon(self, filename):
-		s3 = boto3.client('s3', os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'])
+		s3 = boto3.client('s3', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'])
 		s3.download_file('digit_draw_recognize', filename, os.path.join('tmp/', filename))
 		return np.load(os.path.join('tmp/', filename))[()]
 	
