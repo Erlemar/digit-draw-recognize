@@ -64,9 +64,9 @@ def train():
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))
 		digit = request.values['digit']
-		answer = model.train(image, digit)	
+		model.train(image, digit)	
 
-	return answer
+	return 'Trained'
 	
 if __name__ == '__main__':
 	port = int(os.environ.get("PORT", 5000))

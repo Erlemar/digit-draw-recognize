@@ -37,7 +37,7 @@ class net(object):
 		self.params['W2'] = weights['W2']
 		self.params['b2'] = weights['b2']
 
-	def loss(self, X, y=None, reg=0.0):
+	def loss(self, X, y, reg=0.0):
 		"""
 		Compute the loss and gradients for a two layer fully connected neural
 		network.
@@ -63,17 +63,15 @@ class net(object):
 		# Unpack variables from the params dictionary
 		W1, b1 = self.params['W1'], self.params['b1']
 		W2, b2 = self.params['W2'], self.params['b2']
-		X = X.reshape(1, -1)
-		y = y.reshape(1, -1)
+		#X = X.reshape(1, -1)
+		#y = y.reshape(1, -1)
 		N, D = X.shape
-
 		# Compute the forward pass
 		l1 = X.dot(W1) + b1
 		l1[l1 < 0] = 0
 		l2 = l1.dot(W2) + b2
 		exp_scores = np.exp(l2)
-		probs = exp_scores / np.sum(exp_scores)
-
+		probs = exp_scores / np.sum(exp_scores, axis=1, keepdims=True)
 		# Backward pass: compute gradients
 		grads = {}
 		probs[range(X.shape[0]),y] -= 1
@@ -90,7 +88,7 @@ class net(object):
 
 		return grads
 
-	def train(self, X, y, learning_rate=0.1*(0.95**24) / 8, reg=0.001, batch_size=24):
+	def train(self, X, y, learning_rate=0.1*(0.95**24)/32, reg=0.001, batch_size=24):
 		"""
 		Train this neural network using stochastic gradient descent.
 

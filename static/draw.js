@@ -126,11 +126,8 @@ function negative_pred() {
 
 
 function predict() {
+	document.getElementById("digit_form").style.display = "none";	
 	document.getElementById("rec_result").innerHTML = "";
-	document.getElementById("prediction").style.display = "block";
-    document.getElementById("hide_show_btn").style.display = 'block';
-    document.getElementById("answer_reaction").innerHTML = "";
-	
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide detailed information') {
 		document.getElementById("hidable").style.display = "block";
 	} else {
@@ -146,8 +143,18 @@ function predict() {
 			imageBase64: dataURL
 		}
 	}).done(function(response) {
-	  console.log(response)
-	  document.getElementById("rec_result").innerHTML = response
+		console.log(response)
+		if (response == "Can't predict, when nothing is drawn") {
+			document.getElementById("hide_show_btn").style.display = "none";
+			document.getElementById("prediction").style.display = "none";
+			document.getElementById("hidable").style.display = "none";
+			document.getElementById("answer_reaction").innerHTML = "";
+		} else {
+			document.getElementById("prediction").style.display = "block";
+			document.getElementById("hide_show_btn").style.display = 'block';
+			document.getElementById("answer_reaction").innerHTML = "";
+		}
+		document.getElementById("rec_result").innerHTML = response;
 	});
 }
 
@@ -167,6 +174,7 @@ function train_model(digit) {
 	var digit = digit;
 	var canvas = document.getElementById("the_stage");
 	var dataURL = canvas.toDataURL('image/jpg');
+	document.getElementById("rec_result").innerHTML = 'Training...'
 	$.ajax({
 		type: "POST",
 		url: "/hook3",
@@ -176,7 +184,7 @@ function train_model(digit) {
 		}
 	}).done(function(response) {
 	  console.log(response)
-	  //document.getElementById("rec_result").innerHTML = response
+	  document.getElementById("rec_result").innerHTML = response
 	});
 }
 
