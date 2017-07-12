@@ -12,6 +12,9 @@ function start_canvas () {
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup   = function (event) {mouseup(event)};
+    canvas.touchstart = function (event) {mousedown(event)};
+    canvas.touchmove = function (event) {mousemove(event)};
+    canvas.touchend   = function (event) {mouseup(event)};
     for (var o = canvas; o ; o = o.offsetParent) {
     offset_left += (o.offsetLeft - o.scrollLeft);
     offset_top  += (o.offsetTop - o.scrollTop);
@@ -128,6 +131,14 @@ function negative_pred() {
 function predict() {
 	document.getElementById("digit_form").style.display = "none";	
 	document.getElementById("rec_result").innerHTML = "";
+	document.getElementById("prediction").style.display = "block";
+	document.getElementById("hide_show_btn").style.display = 'block';
+	document.getElementById("answer_reaction").innerHTML = "";
+	cells = ["fnn1", "fnn2", "fnn3", "fnn_t1", "fnn_t2", "fnn_t3", "cnn1", "cnn2", "cnn3", "cnn_t1", "cnn_t2", "cnn_t3"]
+	data = ['2 (20%)', '3 (10%)', '4 (5%)', '5 (20%)', '6 (10%)', '7 (5%)', '8 (20%)', '9 (10%)', '10 (5%)', '11 (20%)', '12 (10%)', '13 (5%)']
+	for (let i = 0; i < cells.length; i++) {
+		document.getElementById(cells[i]).innerHTML = data[i];
+	}
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide detailed information') {
 		document.getElementById("hidable").style.display = "block";
 	} else {

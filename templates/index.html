@@ -33,19 +33,19 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="#">
-                    <img src="http://placehold.it/150x50&text=Logo" alt="">
+					<a href="{{ url_for('index_page') }}"><img src="http://placehold.it/150x50&text=Logo" alt=""></a>
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About the project</a>
+						<a href="{{ url_for('about') }}">About the project</a>
                     </li>
                     <li>
-                        <a href="#">Project description</a>
+						<a href="{{ url_for('internals') }}">Project description</a>
                     </li>
                     <li>
-                        <a href="#">Models</a>
+						<a href="{{ url_for('models') }}">Models</a>
                     </li>
                 </ul>
             </div>
@@ -76,50 +76,30 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th>
-											Column heading
-										</th>
-										<th>
-											Column heading
-										</th>
-										<th>
-											Column heading
-										</th>
+										<th>FNN</th>
+										<th>Trained FNN</th>
+										<th>TF CNN</th>
+										<th>TF CNN trained</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
+										<td id="fnn1"> </td>
+										<td id="fnn_t1"> </td>
+										<td id="cnn1"> </td>
+										<td id="cnn_t1"> </td>
 									</tr>
 									<tr>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
+										<td id="fnn2"> </td>
+										<td id="fnn_t2"> </td>
+										<td id="cnn2"> </td>
+										<td id="cnn_t2"> </td>
 									</tr>
 									<tr>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
-										<td>
-											Column content
-										</td>
+										<td id="fnn3"> </td>
+										<td id="fnn_t3"> </td>
+										<td id="cnn3"> </td>
+										<td id="cnn_t3"> </td>
 									</tr>
 									
 								</tbody>
@@ -173,9 +153,44 @@
                 <h2>Collecting the data</h2>
                 <p>The drawn image is saved in temporary folder which is emptied after the end of the session. By default the drawn image is used to improve the quality of predictions by models. If you don't want this, uncheck the relevent flag. No more information is collected.</p>
             </div>
-            <div class="col-md-4">
+			<!--<div class="col-md-4">
                 <h2>Additional information</h2>
                 <p>If you want to know more about this project, press one of the links at the top of the screen (or use navigation bar on mobile). There is also a direct link to Github at the bottom of the page.</p>
+            </div>-->
+            <div class="col-md-4">
+                <h2>Models performance</h2>
+                <table class="table">
+					<thead>
+						<tr>
+							<th>Model</th>
+							<th>MNIST accuracy</th>
+							<th>Worst predicted digit</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>FNN</td>
+							<td id="fnn_mnist"></td>
+							<td id="fnn_bad_digit"></td>
+						</tr>
+						<tr>
+							<td>Trained FNN</td>
+							<td id="fnn_t_mnist"> </td>
+							<td id="fnn_t_bad_digit"> </td>
+						</tr>
+						<tr>
+							<td>TF CNN</td>
+							<td id="cnn_mnist"> </td>
+							<td id="cnn_bad_digit"> </td>
+						</tr>
+						<tr>
+							<td>TF CNN trained</td>
+							<td id="cnn_t_mnist"> </td>
+							<td id="cnn_t_bad_digit"> </td>
+						</tr>
+						
+					</tbody>
+				</table>
             </div>
         </div>
 

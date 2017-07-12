@@ -25,10 +25,25 @@ model = Model()
 CORS(app, headers=['Content-Type'])
 
 @app.route("/", methods=["POST", "GET", 'OPTIONS'])
-#@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
-def index_page(text="", prediction_message=""):
+def index_page():
 
-	return render_template('index.html', text=text, prediction_message=prediction_message)
+	return render_template('index.html')
+	
+@app.route("/about")
+def about():
+
+	return render_template('about.html')
+	
+@app.route("/internals")
+def internals():
+
+	return render_template('internals.html')
+
+@app.route("/models")
+def models():
+
+	return render_template('models.html')
+
 '''
 @app.route('/hook', methods = ["GET", "POST", 'OPTIONS'])
 #@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
@@ -43,8 +58,7 @@ def get_image():
 
 	return save
 '''
-@app.route('/hook2', methods = ["GET", "POST", 'OPTIONS'])
-#@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
+@app.route('/hook2', methods = ["GET", "POST", 'OPTIONS'])	
 def predict():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
