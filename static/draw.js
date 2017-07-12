@@ -12,9 +12,9 @@ function start_canvas () {
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup   = function (event) {mouseup(event)};
-    canvas.touchstart = function (event) {mousedown(event)};
-    canvas.touchmove = function (event) {mousemove(event)};
-    canvas.touchend   = function (event) {mouseup(event)};
+    canvas.touchstart = function (event) {touchstart(event)};
+    canvas.touchmove = function (event) {touchmove(event)};
+    canvas.touchend   = function (event) {touchend(event)};
     for (var o = canvas; o ; o = o.offsetParent) {
     offset_left += (o.offsetLeft - o.scrollLeft);
     offset_top  += (o.offsetTop - o.scrollTop);
