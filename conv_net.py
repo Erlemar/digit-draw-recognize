@@ -4,6 +4,7 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 import tensorflow as tf
+import os
 
 class CNN(object):
 	"""

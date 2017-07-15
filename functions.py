@@ -144,7 +144,7 @@ class Model(object):
 		"""
 	
 		img_array = self.process_image(image)
-		if img_array == None:
+		if img_array is None:
 			return "Can't predict, when nothing is drawn"
 		net = FNN(self.params)
 		net_original = FNN(self.params_original)
