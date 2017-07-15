@@ -38,9 +38,6 @@ class CNN(object):
 		- output_size: The number of classes C.
 		"""
 		self.params = {}
-	
-	def init_weights(shape):
-		return tf.Variable(tf.random_normal(shape, stddev=0.01))
 
 	def model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden):
 		l1a = tf.nn.relu(tf.nn.conv2d(X, w,                       # l1a shape=(?, 28, 28, 32)
@@ -101,7 +98,7 @@ class CNN(object):
 		p_keep_conv = tf.placeholder("float")
 		p_keep_hidden = tf.placeholder("float")
 		b5 = tf.get_variable(name="b5", shape=[10], initializer=tf.zeros_initializer())
-		py_x = model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden)
+		py_x = self.model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden)
 
 		reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 		reg_constant = 0.01
@@ -158,7 +155,7 @@ class CNN(object):
 		p_keep_conv = tf.placeholder("float")
 		p_keep_hidden = tf.placeholder("float")
 		b5 = tf.get_variable(name="b5", shape=[10], initializer=tf.zeros_initializer())
-		py_x = model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden)
+		py_x = self.model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden)
 
 		reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 		reg_constant = 0.01
