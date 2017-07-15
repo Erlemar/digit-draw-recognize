@@ -1,6 +1,6 @@
 import numpy as np
 
-class net(object):
+class FNN(object):
 	"""
 	A two-layer fully-connected neural network. The net has an input dimension of
 	N, a hidden layer dimension of H, and performs classification over C classes.
@@ -15,7 +15,7 @@ class net(object):
 	The outputs of the second fully-connected layer are the scores for each class.
 	"""
 
-	def __init__(self, weights, input_size, hidden_size, output_size):
+	def __init__(self, weights, input_size=28*28, hidden_size=100, output_size=10):
 		"""
 		Initialize the model. Weights are initialized to small random values and
 		biases are initialized to zero. Weights and biases are stored in the
@@ -167,9 +167,13 @@ class net(object):
 		l1[l1 < 0] = 0
 		l2 = l1.dot(self.params['W2']) + self.params['b2']
 		exp_scores = np.exp(l2)
+		probs = exp_scores / np.sum(exp_scores)
 		y_pred = np.argmax(exp_scores)
+		top_3 = list(zip(np.argsort(probs)[::-1][:3], np.round(probs[np.argsort(probs)[::-1][:3]] * 100, 2)))
+		return top_3
+		'''
 		if y_pred < 0.5:
 			return ('Do you even draw, bro? This is hardly a digit!')
 		else:
 			return str(y_pred)
-
+		'''

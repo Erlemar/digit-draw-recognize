@@ -15,18 +15,25 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 #from neural_net import TwoLayerNet
-from two_layer_net import net as tln2
+from two_layer_net import FNN
+from conv_net import CNN
 import random
 from scipy.ndimage.interpolation import rotate, shift
 from skimage import transform
 
 class Model(object):
 	def __init__(self):
-		#self.params = np.load('models/updated_weights.npy')[()]
+		self.params_original = np.load('models/original_weights.npy')[()]
 		self.params = self.load_weights_amazon('updated_weights.npy')
-		self.nothing = 0
+		#self.params_cnn_original = np.load('models/original_weights_cnn.npy')[()]
+		#self.params_cnn = self.load_weights_amazon('updated_weights_cnn.npy')
+		
 
 	def process_image(self, image):
+		"""
+		Processing image for prediction. Saving in temproral folder so that it could be opened by PIL. Cropping and scaling so that the longest side it 20. Then putting it in a center of 28x28 blank image. Returning array of normalized data.
+		"""
+	
 		filename = 'digit' +  '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
@@ -58,6 +65,10 @@ class Model(object):
 		return img_array
 	
 	def augment(self, image, label):
+		"""
+		Augmenting image for training. Saving in temproral folder so that it could be opened by PIL. Cropping and scaling so that the longest side it 20. The width and height of the scaled image are used to resize it again so that there would be 4 images with different combinatins of weight and height. Then putting it in a center of 28x28 blank image. 12 possible angles are defined and each image is randomly rotated by 6 of these angles. Images converted to arrays and normalized. 
+		Returning these arrays and labels.
+		"""
 		filename = 'digit' +  '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
@@ -106,51 +117,88 @@ class Model(object):
 		return np.load(os.path.join('tmp/', filename))[()]
 	
 	def save_weights_amazon(self, filename, file):
-		#with open('tmp/' + filename, 'wb') as f:
-		#	f.write(file)
 		np.save(os.path.join('tmp/', filename), file)
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
 		k = Key(bucket)
-		fn = 'tmp/' + filename
 		k.key = filename
-		k.set_contents_from_filename(fn)
-		
+		k.set_contents_from_filename('tmp/' + filename)
 		return ('Weights saved')
 	
 	def save_image(self, drawn_digit, image):
 		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
-			
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
-		
 		k = Key(bucket)
-		fn = 'tmp/' + filename
 		k.key = filename
-		k.set_contents_from_filename(fn)
-		
+		k.set_contents_from_filename('tmp/' + filename)
 		return ('Image saved successfully with the name {0}'.format(filename))
 	
 	def predict(self, image):
+		"""
+		Predicting image. If nothing is drawn, returns a message; otherwise 4 models are initialized and they make predictions. They return a list of tuples with 3 top predictions and their probabilities. These lists are sent to "select_answer" method to select the best answer. Also tuples are converted into strings for easier processing in JS. The answer and lists with predictions and probabilities are returned.
+		"""
+	
 		img_array = self.process_image(image)
 		if img_array == None:
 			return "Can't predict, when nothing is drawn"
-		net = tln2(self.params, input_size=28*28, hidden_size=100, output_size=10)
-		#net.params = self.params
-
-		prediction = net.predict_single(img_array)
-		return prediction
+		net = FNN(self.params)
+		net_original = FNN(self.params_original)
+		cnn = CNN()
+		cnn_original = CNN()
+		
+		top_3 = net.predict_single(img_array)
+		top_3_original = net_original.predict_single(img_array)		
+		top_3_cnn = cnn.predict(img_array, weights='original')
+		top_3_cnn_original = cnn_original.predict(img_array, weights='updated')
+		
+		#answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original = self(select_answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original)
+		#return answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
+		
+		answer = top_3[0][0]
+		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
+		top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
+		answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original = self.select_answer(top_3, top_3_original, top_3_cnn, top_3_cnn_original)
+		answers_dict = {'answer': str(answer), 'fnn_t': top_3, 'fnn': top_3_original, 'cnn_t': top_3_cnn, 'cnn': top_3_cnn_original}
+		#return answer, top_3, top_3_original
+		return answers_dict
 		
 	def train(self, image, digit):
-		net = tln2(self.params, input_size=28*28, hidden_size=100, output_size=10)
-		#X = self.process_image(image)
-		#y = np.array(int(digit))
+		"""
+		Models are trained. Weights on Amazon are updated.
+		"""
+		net = FNN(self.params)
 		X, y = self.augment(image, digit)
 		net.train(X, y)
-		response = self.save_weights_amazon('updated_weights.npy', net.params)
+		cnn = CNN()
+		cnn.train(X, y)
+		np.save('tmp/updated_weights.npy', net.params)
+		response = self.save_weights_amazon('updated_weights.npy', './tmp/updated_weights.npy')
+		
+		response = self.save_weights_amazon('data-all_2_updated.chkp.meta', './tmp/data-all_2_updated.chkp')
+		response = self.save_weights_amazon('data-all_2_updated.chkp.index', './tmp/data-all_2_updated.chkp')
+		response = self.save_weights_amazon('data-all_2_updated.chkp.data-00000-of-00001', './tmp/data-all_2_updated.chkp')
+		
 		#np.save('models/updated_weights.npy', net.params)
 		return response
+	
+	def select_answer(self, top_3, top_3_original, top_3_cnn, top_3_cnn_original):
+		answer = ''
+
+		if top_3[0][0] == top_3_cnn[0][0]:
+			answer = str(top_3[0][0])
+		elif top_3[0][1] < 50 and top_3_cnn[0][1] < 50:
+			answer = "Can't regognize this as a digit"
+		elif top_3[0][0] != top_3_cnn[0][0]:
+			answer = str(top_3[0][0]) + ' or ' + str(top_3_cnn[0][0])
+		
+		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
+		top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
+		top_3_cnn = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_cnn]
+		top_3_cnn_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_cnn_original]
+		
+		return answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original

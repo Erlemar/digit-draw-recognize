@@ -19,6 +19,7 @@ import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
 #from datetime import timedelta
+import json
 
 app = Flask(__name__)
 model = Model()
@@ -58,16 +59,16 @@ def get_image():
 
 	return save
 '''
-@app.route('/hook2', methods = ["GET", "POST", 'OPTIONS'])	
+@app.route('/hook2', methods = ["GET", "POST", 'OPTIONS'])
 def predict():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
-		#print('Sending data to script')
+		print('Sending data to script')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))		
 		prediction = model.predict(image)	
 
-	return prediction
+	return json.dumps(prediction)
 	
 @app.route('/hook3', methods = ["GET", "POST", 'OPTIONS'])
 #@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')

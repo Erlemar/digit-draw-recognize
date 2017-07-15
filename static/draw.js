@@ -12,12 +12,12 @@ function start_canvas () {
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup   = function (event) {mouseup(event)};
-    canvas.touchstart = function (event) {touchstart(event)};
-    canvas.touchmove = function (event) {touchmove(event)};
-    canvas.touchend   = function (event) {touchend(event)};
+    canvas.ontouchstart = function (event) {touchstart(event)};
+    canvas.ontouchmove = function (event) {touchmove(event)};
+    canvas.ontouchend  = function (event) {touchend(event)};
     for (var o = canvas; o ; o = o.offsetParent) {
-    offset_left += (o.offsetLeft - o.scrollLeft);
-    offset_top  += (o.offsetTop - o.scrollTop);
+		offset_left += (o.offsetLeft - o.scrollLeft);
+		offset_top  += (o.offsetTop - o.scrollTop);
     }
     draw();
 }
@@ -29,14 +29,14 @@ function getPosition(evt) {
     var canvas = document.getElementById("the_stage");
 
     if (evt.pageX) {
-    left = evt.pageX;
-    top  = evt.pageY;
+		left = evt.pageX;
+		top  = evt.pageY;
     } else if (document.documentElement.scrollLeft) {
-    left = evt.clientX + document.documentElement.scrollLeft;
-    top  = evt.clientY + document.documentElement.scrollTop;
+		left = evt.clientX + document.documentElement.scrollLeft;
+		top  = evt.clientY + document.documentElement.scrollTop;
     } else  {
-    left = evt.clientX + document.body.scrollLeft;
-    top  = evt.clientY + document.body.scrollTop;
+		left = evt.clientX + document.body.scrollLeft;
+		top  = evt.clientY + document.body.scrollTop;
     }
     left -= offset_left;
     top -= offset_top;
@@ -44,8 +44,23 @@ function getPosition(evt) {
     return {x : left, y : top}; 
 }
 
-function
-mousedown(event) {
+function getTouchPos(e) {
+	if (!e)
+		var e = event;
+	var touchX = 0;
+	var touchY = 0;
+	
+	if(e.touches) {
+		if (e.touches.length == 1) { // Only deal with one finger
+			var touch = e.touches[0]; // Get the information for finger #1
+			touchX=touch.pageX-touch.target.offsetLeft;
+			touchY=touch.pageY-touch.target.offsetTop;
+		}
+	}
+	return {x : touchX, y : touchY}
+}
+
+function mousedown(event) {
     drawing = true;
     var location = getPosition(event);
     context.lineWidth = 8.0;
@@ -54,8 +69,17 @@ mousedown(event) {
     context.moveTo(location.x,location.y);
 }
 
-function
-mousemove(event) {
+function touchstart(event) {
+    drawing = true;
+    var location = getTouchPos();
+    context.lineWidth = 8.0;
+    context.strokeStyle="#000000";
+    context.beginPath();
+    context.moveTo(location.x,location.y);
+	//event.preventDefault();
+}
+
+function mousemove(event) {
     if (!drawing) 
         return;
     var location = getPosition(event);
@@ -63,13 +87,28 @@ mousemove(event) {
     context.stroke();
 }
 
+function touchmove(event) {
+    if (!drawing) 
+        return;
+    var location = getTouchPos(event);
+    context.lineTo(location.x,location.y);
+    context.stroke();
+	//event.preventDefault();
+}
 
 
-function
-mouseup(event) {
+function mouseup(event) {
     if (!drawing) 
         return;
     mousemove(event);
+	context.closePath();
+    drawing = false;
+}
+
+function touchend(event) {
+    if (!drawing) 
+        return;
+    touchmove(event);
 	context.closePath();
     drawing = false;
 }
@@ -134,11 +173,7 @@ function predict() {
 	document.getElementById("prediction").style.display = "block";
 	document.getElementById("hide_show_btn").style.display = 'block';
 	document.getElementById("answer_reaction").innerHTML = "";
-	cells = ["fnn1", "fnn2", "fnn3", "fnn_t1", "fnn_t2", "fnn_t3", "cnn1", "cnn2", "cnn3", "cnn_t1", "cnn_t2", "cnn_t3"]
-	data = ['2 (20%)', '3 (10%)', '4 (5%)', '5 (20%)', '6 (10%)', '7 (5%)', '8 (20%)', '9 (10%)', '10 (5%)', '11 (20%)', '12 (10%)', '13 (5%)']
-	for (let i = 0; i < cells.length; i++) {
-		document.getElementById(cells[i]).innerHTML = data[i];
-	}
+
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide detailed information') {
 		document.getElementById("hidable").style.display = "block";
 	} else {
@@ -161,11 +196,27 @@ function predict() {
 			document.getElementById("hidable").style.display = "none";
 			document.getElementById("answer_reaction").innerHTML = "";
 		} else {
+			//answers = response
 			document.getElementById("prediction").style.display = "block";
 			document.getElementById("hide_show_btn").style.display = 'block';
 			document.getElementById("answer_reaction").innerHTML = "";
 		}
-		document.getElementById("rec_result").innerHTML = response;
+		var response = JSON.parse(response)
+		//answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
+
+		document.getElementById("fnn1").innerHTML = response['fnn'][0];
+		document.getElementById("fnn2").innerHTML = response['fnn'][1];
+		document.getElementById("fnn3").innerHTML = response['fnn'][2];
+		document.getElementById("fnn_t1").innerHTML = response['fnn_t'][0];
+		document.getElementById("fnn_t2").innerHTML = response['fnn_t'][1];
+		document.getElementById("fnn_t3").innerHTML = response['fnn_t'][2];
+		//document.getElementById("cnn1").innerHTML = response[3][0];
+		//document.getElementById("cnn2").innerHTML = response[3][1];
+		//document.getElementById("cnn3").innerHTML = response[3][2];
+		//document.getElementById("cnn_t1").innerHTML = response[4][0];
+		//document.getElementById("cnn_t2").innerHTML = response[4][1];
+		//document.getElementById("cnn_t3").innerHTML = response[4][2];
+		document.getElementById("rec_result").innerHTML = response["answer"];
 	});
 }
 
