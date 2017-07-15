@@ -191,9 +191,12 @@ class Model(object):
 		if int(top_3[0][0]) == int(top_3_cnn[0][0]):
 			answer = str(top_3[0][0])
 		elif int(top_3[0][1]) < 50 and int(top_3_cnn[0][1]) < 50:
-			answer = "Can't regognize this as a digit"
+			answer = "Can't recognize this as a digit"
 		elif int(top_3[0][0]) != int(top_3_cnn[0][0]):
-			answer = str(top_3[0][0]) + ' or ' + str(top_3_cnn[0][0])
+			if int(top_3[0][0]) > int(top_3_cnn[0][0]):
+				answer = str(top_3[0][0])
+			else:
+				str(top_3_cnn[0][0])
 		
 		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
 		top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
