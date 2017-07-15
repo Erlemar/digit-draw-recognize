@@ -49,7 +49,16 @@ function getTouchPos(e) {
 		var e = event;
 	var touchX = 0;
 	var touchY = 0;
-	
+    if (e.pageX) {
+		touchX = e.pageX;
+		touchY  = e.pageY;
+    } else if (document.documentElement.scrollLeft) {
+		touchX = e.clientX + document.documentElement.scrollLeft;
+		touchY  = e.clientY + document.documentElement.scrollTop;
+    } else  {
+		touchX = evt.clientX + document.body.scrollLeft;
+		touchY  = e.clientY + document.body.scrollTop;
+    }	
 	if(e.touches) {
 		if (e.touches.length == 1) { // Only deal with one finger
 			var touch = e.touches[0]; // Get the information for finger #1
