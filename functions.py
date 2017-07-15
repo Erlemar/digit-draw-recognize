@@ -117,7 +117,7 @@ class Model(object):
 		return np.load(os.path.join('tmp/', filename))[()]
 	
 	def save_weights_amazon(self, filename, file):
-		np.save(os.path.join('tmp/', filename), file)
+		#np.save(os.path.join('tmp/', filename), file)
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
 		bucket = conn.get_bucket('digit_draw_recognize')
