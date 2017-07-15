@@ -15,4 +15,7 @@ requests-file==1.4.1
 requests-oauthlib==0.6.1
 scikit-image
 scipy
+sklearn
+scikit-learn
+struct
 tensorflow
