@@ -17,5 +17,4 @@ scikit-image
 scipy
 sklearn
 scikit-learn
-struct
 tensorflow
