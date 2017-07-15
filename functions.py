@@ -198,7 +198,7 @@ class Model(object):
 		
 		mnist_acc_f = str((mnist_pred_fnn == self.mnist[1]).mean() * 100)
 		
-		mnist_pred_cnn = net.predict(self.mnist[0])
+		mnist_pred_cnn = cnn.predict(self.mnist[0])
 		conf_matrix = metrics.confusion_matrix(self.mnist[1], mnist_pred_cnn, labels=None)
 		l = np.array([conf_matrix[i][i] / (conf_matrix[i][i] + np.sum(conf_matrix[i]) - conf_matrix[i][i]) for i in range(10)])
 		mnist_bad_accuracy_cnn = str(np.argmin(l)) + ' (' + str(np.round(l[np.argmin(l)] * 100, 2)) + '%)'
