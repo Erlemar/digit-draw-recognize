@@ -27,43 +27,6 @@ class Model(object):
 	def __init__(self):
 		self.params_original = np.load('models/original_weights.npy')[()]
 		self.params = self.load_weights_amazon('updated_weights.npy')
-		self.mnist = self.load_mnist() 
-		#self.params_cnn_original = np.load('models/original_weights_cnn.npy')[()]
-		#self.params_cnn = self.load_weights_amazon('updated_weights_cnn.npy')
-		
-	def load_mnist(self,):
-		def read(path = "."):
-
-			fname_img = os.path.join(path, 't10k-images.idx3-ubyte')
-			fname_lbl = os.path.join(path, 't10k-labels.idx1-ubyte')
-
-			# Load everything in some numpy arrays
-			with open(fname_lbl, 'rb') as flbl:
-				magic, num = struct.unpack(">II", flbl.read(8))
-				lbl = np.fromfile(flbl, dtype=np.int8)
-
-			with open(fname_img, 'rb') as fimg:
-				magic, num, rows, cols = struct.unpack(">IIII", fimg.read(16))
-				img = np.fromfile(fimg, dtype=np.uint8).reshape(len(lbl), rows, cols)
-
-			get_img = lambda idx: (lbl[idx], img[idx])
-
-			# Create an iterator which returns each image in turn
-			for i in range(len(lbl)):
-				yield get_img(i)
-		
-		mnist = list(read(path="models"))
-		mnist_labels = []
-		mnist_picts = []
-		for i in (mnist):
-			mnist_labels.append(i[0])
-			mnist_picts.append(i[1])
-		
-		mnist_picts = np.array([i[1] for i in mnist]).reshape(10000, 784) / 255
-		mnist_labels = np.array([i[0] for i in mnist]).astype(int)
-		y_mnist = np.array(mnist_labels).astype(int)
-		
-		return mnist_picts, y_mnist
 			
 	def process_image(self, image):
 		"""
@@ -191,21 +154,8 @@ class Model(object):
 		top_3_cnn = cnn.predict(img_array, weights='original')
 		top_3_cnn_original = cnn_original.predict(img_array, weights='updated')
 		answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original = self.select_answer(top_3, top_3_original, top_3_cnn, top_3_cnn_original)
-		mnist_pred_fnn = net.predict(self.mnist[0])
-		conf_matrix = metrics.confusion_matrix(self.mnist[1], mnist_pred_fnn, labels=None)
-		l = np.array([conf_matrix[i][i] / (conf_matrix[i][i] + np.sum(conf_matrix[i]) - conf_matrix[i][i]) for i in range(10)])
-		mnist_bad_accuracy_fnn = str(np.argmin(l)) + ' (' + str(np.round(l[np.argmin(l)] * 100, 2)) + '%)'
 		
-		mnist_acc_f = str((mnist_pred_fnn == self.mnist[1]).mean() * 100)
-		
-		mnist_pred_cnn = cnn.predict(self.mnist[0])
-		conf_matrix = metrics.confusion_matrix(self.mnist[1], mnist_pred_cnn, labels=None)
-		l = np.array([conf_matrix[i][i] / (conf_matrix[i][i] + np.sum(conf_matrix[i]) - conf_matrix[i][i]) for i in range(10)])
-		mnist_bad_accuracy_cnn = str(np.argmin(l)) + ' (' + str(np.round(l[np.argmin(l)] * 100, 2)) + '%)'
-		
-		mnist_acc_c = str((mnist_pred_cnn == self.mnist[1]).mean() * 100)
-		
-		answers_dict = {'answer': str(answer), 'fnn_t': top_3, 'fnn': top_3_original, 'cnn_t': top_3_cnn, 'cnn': top_3_cnn_original, 'mnist_bad_accuracy_fnn': mnist_bad_accuracy_fnn, 'mnist_bad_accuracy_cnn': mnist_bad_accuracy_cnn, 'mnist_acc_f': mnist_acc_f, 'mnist_acc_c': mnist_acc_c}
+		answers_dict = {'answer': str(answer), 'fnn_t': top_3, 'fnn': top_3_original, 'cnn_t': top_3_cnn, 'cnn': top_3_cnn_original}
 		#return answer, top_3, top_3_original
 		return answers_dict
 		

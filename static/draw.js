@@ -218,11 +218,7 @@ function predict() {
 			document.getElementById("cnn3").innerHTML = response['cnn'][2];
 			document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
 			document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
-			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
-			document.getElementById("fnn_t_bad_digit").innerHTML = response['mnist_bad_accuracy_fnn'];
-			document.getElementById("cnn_t_bad_digit").innerHTML = response['mnist_bad_accuracy_cnn'];
-			document.getElementById("fnn_t_mnist").innerHTML = response['mnist_acc_f'];
-			document.getElementById("cnn_t_mnist").innerHTML = response['mnist_acc_c'];
+			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];	
 			document.getElementById("rec_result").innerHTML = response["answer"];
 		}
 	});
