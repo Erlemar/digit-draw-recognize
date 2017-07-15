@@ -39,7 +39,7 @@ class CNN(object):
 		"""
 		self.params = {}
 
-	def model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden):
+	def model(self, X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden):
 		l1a = tf.nn.relu(tf.nn.conv2d(X, w,                       # l1a shape=(?, 28, 28, 32)
 							strides=[1, 1, 1, 1], padding='SAME') + b1)
 		l1 = tf.nn.max_pool(l1a, ksize=[1, 2, 2, 1],              # l1 shape=(?, 14, 14, 32)
@@ -99,7 +99,7 @@ class CNN(object):
 		p_keep_hidden = tf.placeholder("float")
 		b5 = tf.get_variable(name="b5", shape=[10], initializer=tf.zeros_initializer())
 		py_x = self.model(X, w, w3, w4, w_o, p_keep_conv, p_keep_hidden)
-
+						
 		reg_losses = tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)
 		reg_constant = 0.01
 
