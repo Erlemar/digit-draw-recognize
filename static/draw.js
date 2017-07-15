@@ -74,7 +74,7 @@ function mousedown(event) {
 
 function touchstart(event) {
     drawing = true;
-    var location = getTouchPos();
+    var location = getTouchPos(event);
     context.lineWidth = 8.0;
     context.strokeStyle="#000000";
     context.beginPath();
