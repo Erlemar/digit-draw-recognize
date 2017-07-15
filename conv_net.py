@@ -180,7 +180,7 @@ class CNN(object):
 
 		cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=py_x, labels=Y)+ reg_constant * sum(reg_losses))
 
-		train_op = tf.train.RMSPropOptimizer(0.000001).minimize(cost)
+		train_op = tf.train.RMSPropOptimizer(0.00001).minimize(cost)
 		predict_op = tf.argmax(py_x, 1)
 		probs = tf.nn.softmax(py_x)
 		saver = tf.train.Saver()

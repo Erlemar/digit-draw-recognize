@@ -11,10 +11,10 @@ function start_canvas () {
     context = canvas.getContext ("2d");
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
-    canvas.onmouseup   = function (event) {mouseup(event)};
+    canvas.onmouseup = function (event) {mouseup(event)};
     canvas.ontouchstart = function (event) {touchstart(event)};
     canvas.ontouchmove = function (event) {touchmove(event)};
-    canvas.ontouchend  = function (event) {touchend(event)};
+    canvas.ontouchend = function (event) {touchend(event)};
     for (var o = canvas; o ; o = o.offsetParent) {
 		offset_left += (o.offsetLeft - o.scrollLeft);
 		offset_top  += (o.offsetTop - o.scrollTop);
@@ -49,16 +49,7 @@ function getTouchPos(e) {
 		var e = event;
 	var touchX = 0;
 	var touchY = 0;
-    if (e.pageX) {
-		touchX = e.pageX;
-		touchY  = e.pageY;
-    } else if (document.documentElement.scrollLeft) {
-		touchX = e.clientX + document.documentElement.scrollLeft;
-		touchY  = e.clientY + document.documentElement.scrollTop;
-    } else  {
-		touchX = evt.clientX + document.body.scrollLeft;
-		touchY  = e.clientY + document.body.scrollTop;
-    }	
+
 	if(e.touches) {
 		if (e.touches.length == 1) { // Only deal with one finger
 			var touch = e.touches[0]; // Get the information for finger #1
@@ -66,8 +57,6 @@ function getTouchPos(e) {
 			touchY=touch.pageY-touch.target.offsetTop;
 		}
 	}
-	touchX -= offset_left;
-    touchY -= offset_top;
 	return {x : touchX, y : touchY}
 }
 
