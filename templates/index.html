@@ -39,13 +39,13 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About the project</a>
+                        <a href="{{ url_for('about') }}">About the project</a>
                     </li>
                     <li>
-                        <a href="#">Project description</a>
+                        <a href="{{ url_for('internals') }}">Project description</a>
                     </li>
                     <li>
-                        <a href="#">Models</a>
+                        <a href="{{ url_for('models') }}">Models</a>
                     </li>
                 </ul>
             </div>

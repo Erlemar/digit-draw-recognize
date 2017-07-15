@@ -1,24 +1,14 @@
-__author__ = 'Artgor'
-#import time
-#print("Loading data")
-#start_time = time.time()
+__author__ = 'Erlemar'
 from functions import Model
 from flask import Flask, render_template, request
 from flask_cors import CORS, cross_origin
-#from functools import update_wrapper
-#from scipy import misc
-#import numpy as np
-#from PIL import Image
 import base64
-#import re
-#from io import StringIO
 import os
 import uuid
 import boto
 import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
-#from datetime import timedelta
 import json
 
 app = Flask(__name__)
@@ -71,11 +61,9 @@ def predict():
 	return json.dumps(prediction)
 	
 @app.route('/hook3', methods = ["GET", "POST", 'OPTIONS'])
-#@cross_origin(origin='https://digits-draw-recognize.herokuapp.com')
 def train():
 	if request.method == 'POST':
 		image_b64 = request.values['imageBase64']
-		#print('Sending data to script')
 		image_encoded = image_b64.split(',')[1]
 		image = base64.decodebytes(image_encoded.encode('utf-8'))
 		digit = request.values['digit']
