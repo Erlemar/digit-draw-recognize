@@ -54,8 +54,8 @@ function getTouchPos(e) {
 		if (e.touches.length == 1) { // Only deal with one finger
 			var touch = e.touches[0]; // Get the information for finger #1
 			var canvasRect = canvas.getBoundingClientRect();
-			touchX: evt.clientX - canvasRect.left;
-			touchY: evt.clientY - canvasRect.top;
+			touchX: touch.pageX - canvasRect.left;
+			touchY: touch.pageY - canvasRect.top;
 			//touchX=touch.pageX-touch.target.offsetLeft;
 			//touchY=touch.pageY-touch.target.offsetTop;
 		}
@@ -198,28 +198,29 @@ function predict() {
 			document.getElementById("prediction").style.display = "none";
 			document.getElementById("hidable").style.display = "none";
 			document.getElementById("answer_reaction").innerHTML = "";
+			document.getElementById("rec_result").innerHTML = response;
 		} else {
 			//answers = response
 			document.getElementById("prediction").style.display = "block";
 			document.getElementById("hide_show_btn").style.display = 'block';
 			document.getElementById("answer_reaction").innerHTML = "";
-		}
-		var response = JSON.parse(response)
-		//answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
+			var response = JSON.parse(response)
+			//answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
 
-		document.getElementById("fnn1").innerHTML = response['fnn'][0];
-		document.getElementById("fnn2").innerHTML = response['fnn'][1];
-		document.getElementById("fnn3").innerHTML = response['fnn'][2];
-		document.getElementById("fnn_t1").innerHTML = response['fnn_t'][0];
-		document.getElementById("fnn_t2").innerHTML = response['fnn_t'][1];
-		document.getElementById("fnn_t3").innerHTML = response['fnn_t'][2];
-		document.getElementById("cnn1").innerHTML = response['cnn'][0];
-		document.getElementById("cnn2").innerHTML = response['cnn'][1];
-		document.getElementById("cnn3").innerHTML = response['cnn'][2];
-		document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
-		document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
-		document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
-		document.getElementById("rec_result").innerHTML = response["answer"];
+			document.getElementById("fnn1").innerHTML = response['fnn'][0];
+			document.getElementById("fnn2").innerHTML = response['fnn'][1];
+			document.getElementById("fnn3").innerHTML = response['fnn'][2];
+			document.getElementById("fnn_t1").innerHTML = response['fnn_t'][0];
+			document.getElementById("fnn_t2").innerHTML = response['fnn_t'][1];
+			document.getElementById("fnn_t3").innerHTML = response['fnn_t'][2];
+			document.getElementById("cnn1").innerHTML = response['cnn'][0];
+			document.getElementById("cnn2").innerHTML = response['cnn'][1];
+			document.getElementById("cnn3").innerHTML = response['cnn'][2];
+			document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
+			document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
+			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
+			document.getElementById("rec_result").innerHTML = response["answer"];
+		}
 	});
 }
 
