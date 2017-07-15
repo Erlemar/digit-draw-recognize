@@ -169,7 +169,7 @@ function negative_pred() {
 
 function predict() {
 	document.getElementById("digit_form").style.display = "none";	
-	document.getElementById("rec_result").innerHTML = "";
+	document.getElementById("rec_result").innerHTML = "Predicting...";
 	document.getElementById("prediction").style.display = "block";
 	document.getElementById("hide_show_btn").style.display = 'block';
 	document.getElementById("answer_reaction").innerHTML = "";
@@ -210,12 +210,12 @@ function predict() {
 		document.getElementById("fnn_t1").innerHTML = response['fnn_t'][0];
 		document.getElementById("fnn_t2").innerHTML = response['fnn_t'][1];
 		document.getElementById("fnn_t3").innerHTML = response['fnn_t'][2];
-		//document.getElementById("cnn1").innerHTML = response[3][0];
-		//document.getElementById("cnn2").innerHTML = response[3][1];
-		//document.getElementById("cnn3").innerHTML = response[3][2];
-		//document.getElementById("cnn_t1").innerHTML = response[4][0];
-		//document.getElementById("cnn_t2").innerHTML = response[4][1];
-		//document.getElementById("cnn_t3").innerHTML = response[4][2];
+		document.getElementById("cnn1").innerHTML = response['cnn'][0];
+		document.getElementById("cnn2").innerHTML = response['cnn'][1];
+		document.getElementById("cnn3").innerHTML = response['cnn'][2];
+		document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
+		document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
+		document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];
 		document.getElementById("rec_result").innerHTML = response["answer"];
 	});
 }

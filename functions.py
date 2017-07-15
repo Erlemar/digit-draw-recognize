@@ -157,11 +157,10 @@ class Model(object):
 		top_3_cnn_original = cnn_original.predict(img_array, weights='updated')
 		
 		#answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original = self(select_answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original)
-		#return answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
 		
-		answer = top_3[0][0]
-		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
-		top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
+		#answer = top_3[0][0]
+		#top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
+		#top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
 		answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original = self.select_answer(top_3, top_3_original, top_3_cnn, top_3_cnn_original)
 		answers_dict = {'answer': str(answer), 'fnn_t': top_3, 'fnn': top_3_original, 'cnn_t': top_3_cnn, 'cnn': top_3_cnn_original}
 		#return answer, top_3, top_3_original
@@ -188,12 +187,12 @@ class Model(object):
 	
 	def select_answer(self, top_3, top_3_original, top_3_cnn, top_3_cnn_original):
 		answer = ''
-
-		if top_3[0][0] == top_3_cnn[0][0]:
+		
+		if int(top_3[0][0]) == int(top_3_cnn[0][0]):
 			answer = str(top_3[0][0])
-		elif top_3[0][1] < 50 and top_3_cnn[0][1] < 50:
+		elif int(top_3[0][1]) < 50 and int(top_3_cnn[0][1]) < 50:
 			answer = "Can't regognize this as a digit"
-		elif top_3[0][0] != top_3_cnn[0][0]:
+		elif int(top_3[0][0]) != int(top_3_cnn[0][0]):
 			answer = str(top_3[0][0]) + ' or ' + str(top_3_cnn[0][0])
 		
 		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
