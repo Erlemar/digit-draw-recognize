@@ -49,12 +49,15 @@ function getTouchPos(e) {
 		var e = event;
 	var touchX = 0;
 	var touchY = 0;
-
+	
 	if(e.touches) {
 		if (e.touches.length == 1) { // Only deal with one finger
 			var touch = e.touches[0]; // Get the information for finger #1
-			touchX=touch.pageX-touch.target.offsetLeft;
-			touchY=touch.pageY-touch.target.offsetTop;
+			var canvasRect = canvas.getBoundingClientRect();
+			touchX: evt.clientX - canvasRect.left;
+			touchY: evt.clientY - canvasRect.top;
+			//touchX=touch.pageX-touch.target.offsetLeft;
+			//touchY=touch.pageY-touch.target.offsetTop;
 		}
 	}
 	return {x : touchX, y : touchY}
