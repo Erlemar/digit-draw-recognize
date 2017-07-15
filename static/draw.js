@@ -66,6 +66,8 @@ function getTouchPos(e) {
 			touchY=touch.pageY-touch.target.offsetTop;
 		}
 	}
+	touchX -= offset_left;
+    touchY -= offset_top;
 	return {x : touchX, y : touchY}
 }
 
