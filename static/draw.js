@@ -18,8 +18,8 @@ function startup() {
 
 //canvas functions
 function start_canvas () {
-    var canvas = document.getElementById ("the_stage");
-    context = canvas.getContext ("2d");
+    var canvas = document.getElementById("the_stage");
+    context = canvas.getContext("2d");
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup = function (event) {mouseup(event)};
@@ -94,49 +94,49 @@ function handleStart(evt) {
     
  
 //  log("touchstart.");
-  var el = document.getElementsByTagName("canvas")[0];
-  var ctx = el.getContext("2d");
+  var canvas = document.getElementById("the_stage");
+  var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
-var offset = findPos(el);  
+var offset = findPos(canvas);  
     
    
   for (var i = 0; i < touches.length; i++) {
-      if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(el.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(el.height)){
+      if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
             evt.preventDefault();
     log("touchstart:" + i + "...");
     ongoingTouches.push(copyTouch(touches[i]));
     var color = colorForTouch(touches[i]);
-    ctx.beginPath();
-    ctx.arc(touches[i].clientX-offset.x, touches[i].clientY-offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
-    ctx.fillStyle = color;
-    ctx.fill();
+    context.beginPath();
+    context.arc(touches[i].clientX-offset.x, touches[i].clientY-offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
+    context.fillStyle = color;
+    context.fill();
     log("touchstart:" + i + ".");
   }
   }
 }
 function handleMove(evt) {
 
-  var el = document.getElementsByTagName("canvas")[0];
-  var ctx = el.getContext("2d");
+  var canvas = document.getElementById("the_stage")];
+  var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
-  var offset = findPos(el);
+  var offset = findPos(canvas);
 
   for (var i = 0; i < touches.length; i++) {
-        if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(el.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(el.height)){
+        if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
               evt.preventDefault();
       var color = colorForTouch(touches[i]);
     var idx = ongoingTouchIndexById(touches[i].identifier);
     
     if (idx >= 0) {
       log("continuing touch " + idx);
-      ctx.beginPath();
-      log("ctx.moveTo(" + ongoingTouches[idx].clientX + ", " + ongoingTouches[idx].clientY + ");");
-      ctx.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
-      log("ctx.lineTo(" + touches[i].clientX + ", " + touches[i].clientY + ");");
-      ctx.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
-      ctx.lineWidth = 4;
-      ctx.strokeStyle = color;
-      ctx.stroke();
+      context.beginPath();
+      log("context.moveTo(" + ongoingTouches[idx].clientX + ", " + ongoingTouches[idx].clientY + ");");
+      context.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
+      log("context.lineTo(" + touches[i].clientX + ", " + touches[i].clientY + ");");
+      context.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
+      context.lineWidth = 4;
+      context.strokeStyle = color;
+      context.stroke();
       
       ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
       log(".");
@@ -149,24 +149,24 @@ function handleMove(evt) {
 function handleEnd(evt) {
 
 //  log("touchend/touchleave.");
-  var el = document.getElementsByTagName("canvas")[0];
-  var ctx = el.getContext("2d");
+  var canvas = document.getElementById("the_stage")];
+  var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
-  var offset = findPos(el);
+  var offset = findPos(canvas);
         
   for (var i = 0; i < touches.length; i++) {
-              if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(el.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(el.height)){
+              if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
                     evt.preventDefault();
     var color = colorForTouch(touches[i]);
     var idx = ongoingTouchIndexById(touches[i].identifier);
         
     if (idx >= 0) {
-      ctx.lineWidth = 4;
-      ctx.fillStyle = color;
-      ctx.beginPath();
-      ctx.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
-      ctx.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
-      ctx.fillRect(touches[i].clientX - 4-offset.x, touches[i].clientY - 4-offset.y, 8, 8); // and a square at the end
+      context.lineWidth = 4;
+      context.fillStyle = color;
+      context.beginPath();
+      context.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
+      context.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
+      context.fillRect(touches[i].clientX - 4-offset.x, touches[i].clientY - 4-offset.y, 8, 8); // and a square at the end
       ongoingTouches.splice(i, 1); // remove it; we're done
     } else {
       log("can't figure out which touch to end");

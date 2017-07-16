@@ -186,7 +186,7 @@ class Model(object):
 		elif int(top_3[0][1]) < 50 and int(top_3_cnn[0][1]) < 50:
 			answer = "Can't recognize this as a digit"
 		elif int(top_3[0][0]) != int(top_3_cnn[0][0]):
-			if int(top_3[0][0]) > int(top_3_cnn[0][0]):
+			if int(top_3[0][1]) > int(top_3_cnn[0][1]):
 				answer = str(top_3[0][0])
 			else:
 				answer = str(top_3_cnn[0][0])
