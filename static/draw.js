@@ -30,6 +30,15 @@ function start_canvas () {
 		offset_left += (o.offsetLeft - o.scrollLeft);
 		offset_top  += (o.offsetTop - o.scrollTop);
     }
+	
+	var el =document.body;
+	el.addEventListener("touchstart", handleStart, false);
+	el.addEventListener("touchend", handleEnd, false);
+	el.addEventListener("touchcancel", handleCancel, false);
+	el.addEventListener("touchleave", handleEnd, false);
+	el.addEventListener("touchmove", handleMove, false);
+	log("initialized.");
+	
     draw();
 }
 
