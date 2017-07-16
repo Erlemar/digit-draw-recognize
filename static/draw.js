@@ -4,6 +4,7 @@ var context;
 
 var offset_left = 0;
 var offset_top = 0;
+var ongoingTouches = [];
 
 //canvas functions
 function start_canvas () {
@@ -20,6 +21,90 @@ function start_canvas () {
 		offset_top  += (o.offsetTop - o.scrollTop);
     }
     draw();
+}
+
+function handleStart(evt) {
+  evt.preventDefault();
+  log("touchstart.");
+  var el = document.getElementById ("the_stage")[0];
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+        
+  for (var i = 0; i < touches.length; i++) {
+    log("touchstart:" + i + "...");
+    ongoingTouches.push(copyTouch(touches[i]));
+    var color = colorForTouch(touches[i]);
+    ctx.beginPath();
+    ctx.arc(touches[i].pageX, touches[i].pageY, 4, 0, 2 * Math.PI, false);  // a circle at the start
+    ctx.fillStyle = color;
+    ctx.fill();
+    log("touchstart:" + i + ".");
+  }
+}
+
+function handleMove(evt) {
+  evt.preventDefault();
+  var el = document.getElementById ("the_stage")[0];
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+
+  for (var i = 0; i < touches.length; i++) {
+    var color = colorForTouch(touches[i]);
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+    if (idx >= 0) {
+      log("continuing touch "+idx);
+      ctx.beginPath();
+      log("ctx.moveTo(" + ongoingTouches[idx].pageX + ", " + ongoingTouches[idx].pageY + ");");
+      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+      log("ctx.lineTo(" + touches[i].pageX + ", " + touches[i].pageY + ");");
+      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = color;
+      ctx.stroke();
+
+      ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
+      log(".");
+    } else {
+      log("can't figure out which touch to continue");
+    }
+  }
+}
+
+function handleEnd(evt) {
+  evt.preventDefault();
+  log("touchend");
+  var el = document.getElementById ("the_stage")[0];
+  var ctx = el.getContext("2d");
+  var touches = evt.changedTouches;
+
+  for (var i = 0; i < touches.length; i++) {
+    var color = colorForTouch(touches[i]);
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+
+    if (idx >= 0) {
+      ctx.lineWidth = 4;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
+      ctx.lineTo(touches[i].pageX, touches[i].pageY);
+      ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8);  // and a square at the end
+      ongoingTouches.splice(idx, 1);  // remove it; we're done
+    } else {
+      log("can't figure out which touch to end");
+    }
+  }
+}
+
+function handleCancel(evt) {
+  evt.preventDefault();
+  log("touchcancel.");
+  var touches = evt.changedTouches;
+  
+  for (var i = 0; i < touches.length; i++) {
+    var idx = ongoingTouchIndexById(touches[i].identifier);
+    ongoingTouches.splice(idx, 1);  // remove it; we're done
+  }
 }
 
 function getPosition(evt) {
@@ -44,25 +129,6 @@ function getPosition(evt) {
     return {x : left, y : top}; 
 }
 
-function getTouchPos(e) {
-	if (!e)
-		var e = event;
-	var touchX = 0;
-	var touchY = 0;
-	
-	if(e.touches) {
-		if (e.touches.length == 1) { // Only deal with one finger
-			var touch = e.touches[0]; // Get the information for finger #1
-			rect = canvas.getBoundingClientRect()
-			touchX: touch.clientX - canvasRect.left;
-			touchY: touch.clientY - canvasRect.top;
-			//touchX=touch.pageX-touch.target.offsetLeft;
-			//touchY=touch.pageY-touch.target.offsetTop;
-		}
-	}
-	return {x : touchX, y : touchY}
-}
-
 function mousedown(event) {
     drawing = true;
     var location = getPosition(event);
@@ -72,15 +138,6 @@ function mousedown(event) {
     context.moveTo(location.x,location.y);
 }
 
-function touchstart(event) {
-    drawing = true;
-    var location = getTouchPos(event);
-    context.lineWidth = 8.0;
-    context.strokeStyle="#000000";
-    context.beginPath();
-    context.moveTo(location.x,location.y);
-	//event.preventDefault();
-}
 
 function mousemove(event) {
     if (!drawing) 
@@ -90,28 +147,11 @@ function mousemove(event) {
     context.stroke();
 }
 
-function touchmove(event) {
-    if (!drawing) 
-        return;
-    var location = getTouchPos(event);
-    context.lineTo(location.x,location.y);
-    context.stroke();
-	//event.preventDefault();
-}
-
 
 function mouseup(event) {
     if (!drawing) 
         return;
     mousemove(event);
-	context.closePath();
-    drawing = false;
-}
-
-function touchend(event) {
-    if (!drawing) 
-        return;
-    touchmove(event);
 	context.closePath();
     drawing = false;
 }
@@ -255,7 +295,11 @@ function train_model(digit) {
 }
 
 
-onload = start_canvas;
-
-// https://stackoverflow.com/questions/16057256/draw-on-a-canvas-via-mouse-and-touch
-// https://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
+function startup() {
+  var el = document.getElementsByTagName("canvas")[0];
+  el.addEventListener("touchstart", handleStart, false);
+  el.addEventListener("touchend", handleEnd, false);
+  el.addEventListener("touchcancel", handleCancel, false);
+  el.addEventListener("touchmove", handleMove, false);
+  log("initialized.");
+}
