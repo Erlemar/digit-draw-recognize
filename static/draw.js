@@ -234,6 +234,18 @@ function clearCanvas() {
     document.getElementById("hidable").style.display = "none";
     document.getElementById("answer_reaction").innerHTML = "";
     document.getElementById("rec_result").innerHTML = "";
+	document.getElementById("fnn1").style.color = 'gray';
+	document.getElementById("fnn2").style.color = 'gray';
+	document.getElementById("fnn3").style.color = 'gray';
+	document.getElementById("fnn_t1").style.color = 'gray';
+	document.getElementById("fnn_t2").style.color = 'gray';
+	document.getElementById("fnn_t3").style.color = 'gray';
+	document.getElementById("cnn1").style.color = 'gray';
+	document.getElementById("cnn2").style.color = 'gray';
+	document.getElementById("cnn3").style.color = 'gray';
+	document.getElementById("cnn_t1").style.color = 'gray';
+	document.getElementById("cnn_t2").style.color = 'gray';
+	document.getElementById("cnn_t3").style.color = 'gray';
 }
 
 //button events
@@ -311,7 +323,20 @@ function predict() {
 			document.getElementById("answer_reaction").innerHTML = "";
 			var response = JSON.parse(response)
 			//answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
-
+			
+			document.getElementById("fnn1").style.color = 'black';
+			document.getElementById("fnn2").style.color = 'black';
+			document.getElementById("fnn3").style.color = 'black';
+			document.getElementById("fnn_t1").style.color = 'black';
+			document.getElementById("fnn_t2").style.color = 'black';
+			document.getElementById("fnn_t3").style.color = 'black';
+			document.getElementById("cnn1").style.color = 'black';
+			document.getElementById("cnn2").style.color = 'black';
+			document.getElementById("cnn3").style.color = 'black';
+			document.getElementById("cnn_t1").style.color = 'black';
+			document.getElementById("cnn_t2").style.color = 'black';
+			document.getElementById("cnn_t3").style.color = 'black';
+			
 			document.getElementById("fnn1").innerHTML = response['fnn'][0];
 			document.getElementById("fnn2").innerHTML = response['fnn'][1];
 			document.getElementById("fnn3").innerHTML = response['fnn'][2];
