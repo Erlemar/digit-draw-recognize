@@ -12,7 +12,6 @@ function startup() {
   el.addEventListener("touchcancel", handleCancel, false);
   el.addEventListener("touchleave", handleEnd, false);
   el.addEventListener("touchmove", handleMove, false);
-  log("initialized.");
 }
 
 
@@ -37,8 +36,6 @@ function start_canvas () {
 	el.addEventListener("touchcancel", handleCancel, false);
 	el.addEventListener("touchleave", handleEnd, false);
 	el.addEventListener("touchmove", handleMove, false);
-	log("initialized.");
-	
     draw();
 }
 
@@ -102,7 +99,7 @@ var ongoingTouches = new Array;
 function handleStart(evt) {
     
  
-//  log("touchstart.");
+
   var canvas = document.getElementById("the_stage");
   var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
@@ -112,14 +109,12 @@ var offset = findPos(canvas);
   for (var i = 0; i < touches.length; i++) {
       if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
             evt.preventDefault();
-    log("touchstart:" + i + "...");
     ongoingTouches.push(copyTouch(touches[i]));
     var color = colorForTouch(touches[i]);
     context.beginPath();
     context.arc(touches[i].clientX-offset.x, touches[i].clientY-offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
     context.fillStyle = color;
     context.fill();
-    log("touchstart:" + i + ".");
   }
   }
 }
@@ -137,27 +132,22 @@ function handleMove(evt) {
     var idx = ongoingTouchIndexById(touches[i].identifier);
     
     if (idx >= 0) {
-      log("continuing touch " + idx);
       context.beginPath();
-      log("context.moveTo(" + ongoingTouches[idx].clientX + ", " + ongoingTouches[idx].clientY + ");");
       context.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
-      log("context.lineTo(" + touches[i].clientX + ", " + touches[i].clientY + ");");
+	  
       context.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
       context.lineWidth = 4;
       context.strokeStyle = color;
       context.stroke();
       
       ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
-      log(".");
     } else {
-      log("can't figure out which touch to continue");
     }
   }
         }
 }
 function handleEnd(evt) {
 
-//  log("touchend/touchleave.");
   var canvas = document.getElementById("the_stage");
   var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
@@ -178,14 +168,12 @@ function handleEnd(evt) {
       context.fillRect(touches[i].clientX - 4-offset.x, touches[i].clientY - 4-offset.y, 8, 8); // and a square at the end
       ongoingTouches.splice(i, 1); // remove it; we're done
     } else {
-      log("can't figure out which touch to end");
     }
   }
         }
 }
 function handleCancel(evt) {
   evt.preventDefault();
-  log("touchcancel.");
   var touches = evt.changedTouches;
   
   for (var i = 0; i < touches.length; i++) {
@@ -200,7 +188,6 @@ function colorForTouch(touch) {
   g = g.toString(16); // make it a hex digit
   b = b.toString(16); // make it a hex digit
   var color = "#" + r + g + b;
-  log("color for touch with identifier " + touch.identifier + " = " + color);
   return color;
 }
 function copyTouch(touch) {
@@ -216,11 +203,7 @@ function ongoingTouchIndexById(idToFind) {
   }
   return -1; // not found
 }
-function log(msg) {
-  var p = document.getElementById('log');
-  p.innerHTML = msg + "\n" + p.innerHTML;
-}
- 
+
 function findPos (obj) {
     var curleft = 0,
         curtop = 0;
