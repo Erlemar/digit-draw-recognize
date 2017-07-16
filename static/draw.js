@@ -125,7 +125,7 @@ var offset = findPos(canvas);
 }
 function handleMove(evt) {
 
-  var canvas = document.getElementById("the_stage")];
+  var canvas = document.getElementById("the_stage");
   var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
   var offset = findPos(canvas);
@@ -158,7 +158,7 @@ function handleMove(evt) {
 function handleEnd(evt) {
 
 //  log("touchend/touchleave.");
-  var canvas = document.getElementById("the_stage")];
+  var canvas = document.getElementById("the_stage");
   var context = canvas.getContext("2d");
   var touches = evt.changedTouches;
   var offset = findPos(canvas);
