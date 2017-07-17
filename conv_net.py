@@ -93,7 +93,7 @@ class CNN(object):
 		else:
 			f = 'data-all_2_updated.chkp'
 		fn = f + '.meta'
-		bucket = os.environ[S3_BUCKET]
+		bucket = os.environ['S3_BUCKET']
 		s3.download_file(bucket, fn, os.path.join('tmp/', fn))
 		fn = f + '.index'
 		s3.download_file(bucket, fn, os.path.join('tmp/', fn))

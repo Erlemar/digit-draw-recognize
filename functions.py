@@ -115,7 +115,7 @@ class Model(object):
 		Load weights from Amazon. This is npy. file, which neads to be read with np.load.
 		"""
 		s3 = boto3.client('s3', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'])
-		s3.download_file(os.environ[S3_BUCKET], filename, os.path.join('tmp/', filename))
+		s3.download_file(os.environ['S3_BUCKET'], filename, os.path.join('tmp/', filename))
 		return np.load(os.path.join('tmp/', filename))[()]
 	
 	def save_weights_amazon(self, filename, file):
@@ -124,7 +124,7 @@ class Model(object):
 		"""
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket(os.environ[S3_BUCKET])
+		bucket = conn.get_bucket(os.environ['S3_BUCKET'])
 		k = Key(bucket)
 		k.key = filename
 		k.set_contents_from_filename('tmp/' + filename)
@@ -139,7 +139,7 @@ class Model(object):
 			f.write(image)
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket(os.environ[S3_BUCKET])
+		bucket = conn.get_bucket(os.environ['S3_BUCKET'])
 		k = Key(bucket)
 		k.key = filename
 		k.set_contents_from_filename('tmp/' + filename)
