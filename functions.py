@@ -1,30 +1,29 @@
 __author__ = 'Artgor'
-#from sklearn.externals import joblib
 
-from codecs import open
-#from scipy import misc
-import numpy as np
-from PIL import Image
 import base64
-#import re
-#from io import StringIO
 import os
 import uuid
+import struct
+import random
+import numpy as np
+
 import boto
 import boto3
 from boto.s3.key import Key
 from boto.s3.connection import S3Connection
-#from neural_net import TwoLayerNet
+from codecs import open
+from PIL import Image
 from two_layer_net import FNN
 from conv_net import CNN
-import random
 from scipy.ndimage.interpolation import rotate, shift
 from skimage import transform
-import struct
 from sklearn import metrics
 
 class Model(object):
 	def __init__(self):
+		"""
+		Load weights for FNN here. Original weights are loaded from local folder, updated - from Amazon.
+		"""
 		self.params_original = np.load('models/original_weights.npy')[()]
 		self.params = self.load_weights_amazon('updated_weights.npy')
 			
@@ -36,6 +35,7 @@ class Model(object):
 		filename = 'digit' +  '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
+			
 		img = Image.open('tmp/' + filename)
 
 		bbox = Image.eval(img, lambda px: 255-px).getbbox()
@@ -54,12 +54,12 @@ class Model(object):
 		hstart = int((28 - heightlen) / 2)
 		wstart = int((28 - widthlen) / 2)
 
-		img1 = img.crop(bbox).resize((widthlen, heightlen), Image.NEAREST)
+		img_temp = img.crop(bbox).resize((widthlen, heightlen), Image.NEAREST)
 
-		smallImg = Image.new('L', (28,28), 255)
-		smallImg.paste(img1, (wstart, hstart))
+		new_img = Image.new('L', (28,28), 255)
+		new_img.paste(img_temp, (wstart, hstart))
 
-		imgdata = list(smallImg.getdata())
+		imgdata = list(new_img.getdata())
 		img_array = np.array([(255.0 - x) / 255.0 for x in imgdata])
 		return img_array
 	
@@ -71,6 +71,7 @@ class Model(object):
 		filename = 'digit' +  '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
+			
 		image = Image.open('tmp/' + filename)
 		
 		ims_add = []
@@ -101,7 +102,6 @@ class Model(object):
 				for angle in angles_:
 					transformed_image = transform.rotate(np.array(resized_image), angle, cval=255, preserve_range=True).astype(np.uint8)
 					labs_add.append(int(label))
-					#ims_add.append(Image.fromarray(np.uint8(transformed_image)))
 					img_temp = Image.fromarray(np.uint8(transformed_image))
 					imgdata = list(img_temp.getdata())
 					normalized_img = [(255.0 - x) / 255.0 for x in imgdata]
@@ -111,26 +111,35 @@ class Model(object):
 		return image_array, label_array
 	
 	def load_weights_amazon(self, filename):
+		"""
+		Load weights from Amazon. This is npy. file, which neads to be read with np.load.
+		"""
 		s3 = boto3.client('s3', aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'], aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'])
-		s3.download_file('digit_draw_recognize', filename, os.path.join('tmp/', filename))
+		s3.download_file(os.environ[S3_BUCKET], filename, os.path.join('tmp/', filename))
 		return np.load(os.path.join('tmp/', filename))[()]
 	
 	def save_weights_amazon(self, filename, file):
+		"""
+		Save weights to Amazon.
+		"""
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket('digit_draw_recognize')
+		bucket = conn.get_bucket(os.environ[S3_BUCKET])
 		k = Key(bucket)
 		k.key = filename
 		k.set_contents_from_filename('tmp/' + filename)
 		return ('Weights saved')
 	
 	def save_image(self, drawn_digit, image):
+		"""
+		Save image on Amazon. Only existing files can be uploaded, so the image is saved in a temporary folder.
+		"""
 		filename = 'digit' + str(drawn_digit) + '__' + str(uuid.uuid1()) + '.jpg'
 		with open('tmp/' + filename, 'wb') as f:
 			f.write(image)
 		REGION_HOST = 's3-external-1.amazonaws.com'
 		conn = S3Connection(os.environ['AWS_ACCESS_KEY_ID'], os.environ['AWS_SECRET_ACCESS_KEY'], host=REGION_HOST)
-		bucket = conn.get_bucket('digit_draw_recognize')
+		bucket = conn.get_bucket(os.environ[S3_BUCKET])
 		k = Key(bucket)
 		k.key = filename
 		k.set_contents_from_filename('tmp/' + filename)
@@ -175,10 +184,12 @@ class Model(object):
 		response = self.save_weights_amazon('data-all_2_updated.chkp.index', './tmp/data-all_2_updated.chkp')
 		response = self.save_weights_amazon('data-all_2_updated.chkp.data-00000-of-00001', './tmp/data-all_2_updated.chkp')
 		
-		#np.save('models/updated_weights.npy', net.params)
 		return response
 	
 	def select_answer(self, top_3, top_3_original, top_3_cnn, top_3_cnn_original):
+		"""
+		Selects best answer from all. In fact only from the trained models, as they are considered to be better than untrained.
+		"""
 		answer = ''
 		
 		if int(top_3[0][0]) == int(top_3_cnn[0][0]):
