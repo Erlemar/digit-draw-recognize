@@ -245,10 +245,10 @@ function hide_show() {
     var x = document.getElementById('hidable');
     if (x.style.display === 'none') {
         x.style.display = 'block';
-		document.getElementById("hide_show_btn").innerHTML = 'Hide detailed information'
+		document.getElementById("hide_show_btn").innerHTML = 'Hide info'
     } else {
         x.style.display = 'none';
-		document.getElementById("hide_show_btn").innerHTML = 'Show detailed information'
+		document.getElementById("hide_show_btn").innerHTML = 'Show info'
     }
 }
 
