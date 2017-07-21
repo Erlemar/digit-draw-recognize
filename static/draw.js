@@ -218,6 +218,7 @@ function findPos (obj) {
     }
 }
 
+
 function clearCanvas() {
     context.clearRect (0, 0, 200, 200);
     draw();
@@ -286,7 +287,7 @@ function predict() {
 	document.getElementById("hide_show_btn").style.display = 'block';
 	document.getElementById("answer_reaction").innerHTML = "";
 
-	if (document.getElementById("hide_show_btn").innerHTML == 'Hide detailed information') {
+	if (document.getElementById("hide_show_btn").innerHTML == 'Hide info') {
 		document.getElementById("hidable").style.display = "block";
 	} else {
 		document.getElementById("hidable").style.display = "none";
