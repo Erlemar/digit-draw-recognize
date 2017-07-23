@@ -32,20 +32,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
-					<a href="{{ url_for('index_page') }}"><img src="http://placehold.it/150x50&text=Logo" alt=""></a>
+                <a class="navbar-brand" href="{{ url_for('index_page') }}">
+                    <img src="/static/logo.jpg" alt="">
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About the project</a>
+                        <a href="{{ url_for('about') }}">About the project</a>
                     </li>
                     <li>
-                        <a href="#">Project description</a>
+                        <a href="{{ url_for('internals') }}">Project description</a>
                     </li>
                     <li>
-                        <a href="#">Models</a>
+                        <a href="{{ url_for('models') }}">Models</a>
                     </li>
                 </ul>
             </div>
@@ -55,13 +55,38 @@
     <div class="container">
 
 
-            <div class="col-md-7">
-				<div class="row clearfix" id="pr">
-					<div><span id="pred_text">Prediction result:</span> <span id="rec_result"> </span></div>
-					Here be various text.
-
-				</div>
-
+            <div class="col-md-11">
+				<h1>Project description</h1>
+				<p>The general workflow is the following: user draws a digit and presses the button "Predict". Javascript encodes image into 64 bit encoded JPG URL, which is passed into Python. Image is decoded and 4 machine learning models give their predictions. These predictions are passed back into Javascript and it shows them on the page. After this user can confirm the correctness of predictions or input the correct predictions. Based on the checkbox value models can be trained on this image.</p>
+				
+				<h2>Drawing the digits</h2>
+				<p>Functions to draw on canvas are defined in <a href="https://github.com/Erlemar/digit-draw-recognize/blob/master/static/draw.js">draw.js</a>. It is possible to draw with mouse on PC and with touches on mobile devices. Button "Clear" clears the canvas and hides unnecessary elements of interface. Pressing button "Predict" sends the data to python script (64 bit encoded JPG URL) with ajax request.</p>
+				
+				<h2>Receiving the encoded image and predicting labels</h2>
+				<p>The encoded image is passed into <a href="https://github.com/Erlemar/digit-draw-recognize/blob/master/main.py">main.py</a>. It is decoded and is sent to  <a href="https://github.com/Erlemar/digit-draw-recognize/blob/master/functions.py">functions.py</a>. At first weights for FNN are loaded. Weights for "normal" FNN are stored locally on server and can be easily used. Weights for a "trained" model (which is trained on additional images drawn by users) are stored in Amazon cloud (because app can't update files on Heroku itself, they will be deleted/reverted after the end of the session). So weights are downloaded from Amazon. Access keys are stored on Heroku and can be accessed by their given names for security.
+				Then the image is processed:</p>
+				<ul>
+					<li>The digit is cropped on the canvas. If the canvas is empty, then the process stops and the relevant message appears instead of prediction;</li>
+					<li>The image is resized so that its longest side is 20 px;</li>
+					<li>Black and white Image is placed centered on 28x28 blank background;</li>
+					<li>Image is converted into np.array;</li>
+				</ul>
+				<p>After this 4 models are initialized: FNN with original and with updated weights and two instances of CNN (weights used depend on the parameters). Models predict and return 3 most probable labels and their probabilities.</p>
+				<p>Method select_answer uses these labels and probabilities to select the answer. Predictions from trained CNN and FNN are compared and most probable is selected. Method returns answer and converts output of models into lists of strings for easier processing.</p>
+				
+				<h3>User reaction</h3>
+				<p>This data is sent back to main.py and then to JS. The answer is shown in the relevant fields and labels with probabilities for each model are shown in the table.</p>
+				<p>Now user can confirm the prediction or decide that it was wrong. Based on the user's reaction and the checkbox "Allow to use the drawn digit for model training" several things are possible and a relevant message is shown:</p>
+				<ul>
+					<li>Correct prediction and checkbox enabled: models are trained on the image;</li>
+					<li>Wrong prediction and checkbox enabled: user can choose the corrent label and models are trained on the image;</li>
+					<li>Checkbox disabled: nothing happens;</li>
+				</ul>
+				
+				<h3>Training models</h3>
+				<p>If model will be trained, the image is passed to main.py again. This time it isn't simply processed, but also augmented. It is resized based on its length and width and then it is rotated by several random angles (angles are defined as figures in range (-30, 30) with a step of 5; 6 of them are randomly selected). Array with data for these 24 images is used to train FNN and CNN. Then updated weights are saved into the cloud.</p>
+				
+				<p>Initially I wanted to show quality of predictions of MNIST after each training; but it turned out that Heroku can't handle this amount of data in memory at a free plan. As a result the information shown is hardcoded and is updated manually for now.</p>
 
             </div>
  

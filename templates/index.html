@@ -32,8 +32,8 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
-                    <a href="{{ url_for('index_page') }}"><img src="http://placehold.it/150x50&text=Logo" alt=""></a>
+                <a class="navbar-brand" href="{{ url_for('index_page') }}">
+                    <img src="/static/logo.jpg" alt="">
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -169,20 +169,20 @@
 							<td id="fnn_mnist">58.95%</td>
 							<td id="fnn_bad_digit">9 (14.57%)</td>
 						</tr>
-						<!--<tr>
+						<tr>
 							<td>Trained FNN</td>
-							<td id="fnn_t_mnist"> </td>
-							<td id="fnn_t_bad_digit"> </td>-->
+							<td id="fnn_t_mnist">61.73%</td>
+							<td id="fnn_t_bad_digit">7 (14.17%)</td>
 						</tr>
 						<tr>
 							<td>TF CNN</td>
 							<td id="cnn_mnist">74.69%</td>
 							<td id="cnn_bad_digit">7 (25.97%)</td>
 						</tr>
-						<!--<tr>
+						<tr>
 							<td>TF CNN trained</td>
-							<td id="cnn_t_mnist"> </td>
-							<td id="cnn_t_bad_digit"> </td>-->
+							<td id="cnn_t_mnist">74.91%</td>
+							<td id="cnn_t_bad_digit">7 (26.75%)</td>
 						</tr>
 						
 					</tbody>

@@ -32,20 +32,20 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
-					<a href="{{ url_for('index_page') }}"><img src="http://placehold.it/150x50&text=Logo" alt=""></a>
+                <a class="navbar-brand" href="{{ url_for('index_page') }}">
+                    <img src="/static/logo.jpg" alt="">
                 </a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <a href="#">About the project</a>
+                        <a href="{{ url_for('about') }}">About the project</a>
                     </li>
                     <li>
-                        <a href="#">Project description</a>
+                        <a href="{{ url_for('internals') }}">Project description</a>
                     </li>
                     <li>
-                        <a href="#">Models</a>
+                        <a href="{{ url_for('models') }}">Models</a>
                     </li>
                 </ul>
             </div>
@@ -55,22 +55,93 @@
     <div class="container">
 
 
-            <div class="col-md-7">
-				<div class="row clearfix" id="pr">
-					<div><span id="pred_text">Prediction result:</span> <span id="rec_result"> </span></div>
-					Here be various text.
+            <div class="col-md-11">
+					<h1>Models used in the project</h1>
+					<p>This project uses two machine learning models for digit recognition: feedforward neural network written on numpy and convolutional neural network on Tensorflow. These models were inspired by cs231n course. Both were trained on the same dataset of 800 images (drawn by me) which were augmented up to 19200, validation set had 200 images (also drawn by me) and the accuracy of these models was measured by predicting on MNIST test set.</p>
+					
+					<h2>Feed Forward neural net</h2>
+					<p>The structure of model is simple: fully connected layer - ReLU - fully connected layer - softmax. The model is written as a single class, here is the code:</p>
+					<script src="https://gist.github.com/Erlemar/cb431b88d1d64e163601c68a530b8e9c.js"></script>
+					
+					<h3>Code explanation</h3>
+					
+					<ul>
+						<li>Weights are initialized using Xavier weight initialization. This means that the variance is 2/N, where N is a number of inputs to the layer. Thanks to this initial weights aren't too small or too large. At least in theory;</li>
+						<li>Loss method performs forward and backward passes and computes loss with l2 regularization;</li>
+						<li>Train method takes data and parameters as inputs and performs iterative training on mini-batches. After every epoch learning rate is decayed, train and validation accuracy are recorded; loss is computed at every iteration. Accuracies and loss can be plotted later;</li>
+						<li>Predict method takes some data as input and performs a forward pass, returning predicted labels;</li>
+						<li>Predict_single method does the same, but for a single input;</li>
+					</ul>
+					
+					<h3>Model's training and accuracy</h3>
+					<p>I have tried a lot of different values for parameters: learning rate, regularization, number of neurons in hidden layer. I even tried to use 2 or more hidden layers or to use more sophisticated ways to adapt learning rate (RMSprop and ADAM), but they added little. Also at first I wasn't sure what batch size to use, but as each image was augmented up to 24, I decided to use the same value for batch size. In the end the model had the following parameters:</p>
+					<ul>
+						<li>One hidden layer with 100 neurons;</li>
+						<li>19200 iterations or 24 epochs;</li>
+						<li>Learning rate 0.1 with a decay of 0.95 after each epoch;</li>
+						<li>Regularization strength 0.001;</li>
+					</ul>
+					
+					<p>The process of training this model looked like this:</p><br>
+					<img src = "/static/4.jpg" alt = "FNN training"> </img><br>
+					
+					<p>It took several epochs to reach high accuracy, but model trained more so that weights stabilized and learning rate decreased. It could be worth using lower learning rate so that loss will be lower, but in the end it doesn't matter. Training/validation set is easily recognized, high accuracy on MNIST can't be achieved due to difference in data. And it is difficult to imagine how exactly the digits will be drawn on the site.</p>
+																			
+					<img src = "/static/5.jpg" alt = "FNN MNIST confusion matrix" > </img><br>
+					<p>This confusion matrix shows quality of predicitons on MNIST. 9 is often mistaken with 4 and 7 with 1. I think it is more or less reasonable and can be explained by difference in drawing styles. I hope that the accuracy will improve after the model is trained on additional data.</p>
+					
+					<h3>Changes in model so that it can be trained on additional data.</h3>
+					<p>I wanted to use digits drawn by other people as training data for continuous improvement of the model. It required certain changes. The actual file is available on <a href="https://github.com/Erlemar/digit-draw-recognize/blob/master/two_layer_net.py">Github</a>. The main differences are:</p>
+					<ul>
+						<li>Weights aren't initialized randomly, they are passed into the model;</li>
+						<li>Loss isn't caclucated separately, as it isn't necessary;</li>
+						<li>There is only one iteration for all the input data (one image augmented uo to 24);</li>
+						<li>All parameters are defined within the class, none are passed into the model;</li>
+						<li>Predict_single method returns top 3 predictions with their probabilities;</li>
+					</ul>
+					
+					<p>In fact it was quite easy to modify the code so that it could be trained continuously. The main question was what learning rate should be used. Initial training rate was 0.1, but it was decayed 24 times and became 0.1 * (0.95 ^ 24). Also this learning rate was used not for a single iteration, but for a whole epoch. Using this rate could change weights too significantly. After trials and errors I used the learning rate 0.1 * (0.95 ^ 24) / 32. With it each image doesn't change the weights too much, but several similar images may positively influence the accuracy.</p>
+					
+					
+					<h2>Convolutional neural net</h2>
+					<p>The structure of model is more complex than in FNN: conv - relu - pool - dropout - conv - relu - pool - dropout - fully connected layer - dropout - fully connected layer. Here is the code:</p>
+					<script src="https://gist.github.com/Erlemar/9ca303ed987acb85d5bb04c6386ad879.js"></script>
+					
+					<h3>Code explanation</h3>
+					
+					<ul>
+						<li>The model's structure is described in a separate function;</li>
+						<li>Weights are initialized using Xavier weight initialization;</li>
+						<li>During training dropout is applied to conv layers and first fully connected layers;</li>
+						<li>At each step training, validation and test loss and accuracies are recorded;</li>
+						<li>After the training the weights are saved into a local file, which can be loaded for prediction or further training;</li>
+						<li>One can notice that there are layers and weights with numbers 1 and 3, but no number 2. The reason is taht at first I used layer 2, but decided to drop it. I wanted to rename the variables later... but when I tried to do it after trainng and saving the model, I realized I'd need to train and save the model again and it was too late, as the model was already trained several times on the new data and I didn't want to lose it. So I left these numbers and hope I won't repeat such a mistake again;</li>
+					</ul>
+					
+					<h3>Model's training and accuracy</h3>
+					<p>I have tried using various values for parameters, adding or dropping layers and changing layers' and weights' shape. You can see the final version int he code above.</p>
+					
+					<p>Here is an example of a bad combination of parameters:</p><br>
+					<img src = "/static/6.jpg" alt = "bad CNN training"> </img><br>
 
-				</div>
-
-
-            </div>
- 
-
+					<p>The process of training the final model looked like this:</p><br>
+					<img src = "/static/7.jpg" alt = "CNN training"> </img><br>
+					
+					<p>It took several epochs to reach high accuracy, but then accuracy and loss hardly changed. As a result I trained the model again and stopped it at ~100 iteration.</p>
+					
+					<img src = "/static/8.jpg" alt = "CNN MNIST confusion matrix" > </img><br>
+					<p>This confusion matrix shows quality of predicitons on MNIST. Definitely better than FNN</p>
+																			
+					<h3>Changes in model so that it can be trained on additional data.</h3>
+					<p>I wanted to use digits drawn by other people as training data for continuous improvement of the model. It required certain changes. The actual file is available on <a href="https://github.com/Erlemar/digit-draw-recognize/blob/master/conv_net.py">Github</a>. The main differences are:</p>
+					<ul>
+						<li>Weights aren't initialized randomly, they are passed into the model;</li>
+						<li>I don't use a separate function for model's structure - it is defined in train and predict methods;</li>
+						<li>The rest of the changes follow logic of FNN model: only one iteration for training input data, parameters aren't passed into the model, predict method returns top 3 predictions with their probabilities;</li>
+					</ul>
+					<p>It took me some time to be able to train TF model continuously, most of it was spent on learning TF possibilities. As for learning rate - I wasn't sure what value to use. CNN has more iterations and it's architecture is more complex, but using a very low learning rate may be not good enough for updating the model. I decided to use 0.00001 which is 100 time lower than the initial value. And maybe it is too low.</p>
+					</div>
         <hr>
-
-
-
-
 
         <footer>
             <div class="row">

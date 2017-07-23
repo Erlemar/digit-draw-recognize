@@ -6,7 +6,7 @@ var offset_left = 0;
 var offset_top = 0;
 
 function startup() {
-  var el =document.body;
+  var el = document.body;
   el.addEventListener("touchstart", handleStart, false);
   el.addEventListener("touchend", handleEnd, false);
   el.addEventListener("touchcancel", handleCancel, false);
@@ -66,9 +66,9 @@ function mousedown(event) {
     drawing = true;
     var location = getPosition(event);
     context.lineWidth = 8.0;
-    context.strokeStyle="#000000";
+    context.strokeStyle = "#000000";
     context.beginPath();
-    context.moveTo(location.x,location.y);
+    context.moveTo(location.x, location.y);
 }
 
 
@@ -76,7 +76,7 @@ function mousemove(event) {
     if (!drawing) 
         return;
     var location = getPosition(event);
-    context.lineTo(location.x,location.y);
+    context.lineTo(location.x, location.y);
     context.stroke();
 }
 
@@ -283,9 +283,6 @@ function negative_pred() {
 function predict() {
 	document.getElementById("digit_form").style.display = "none";	
 	document.getElementById("rec_result").innerHTML = "Predicting...";
-	document.getElementById("prediction").style.display = "block";
-	document.getElementById("hide_show_btn").style.display = 'block';
-	document.getElementById("answer_reaction").innerHTML = "";
 
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide info') {
 		document.getElementById("hidable").style.display = "block";

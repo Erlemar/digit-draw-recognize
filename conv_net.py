@@ -39,22 +39,27 @@ class CNN(object):
 
 		w = tf.get_variable("w", shape=[4, 4, 1, 16], initializer=tf.contrib.layers.xavier_initializer())
 		b1 = tf.get_variable(name="b1", shape=[16], initializer=tf.zeros_initializer())
+		
 		w3 = tf.get_variable("w3", shape=[4, 4, 16, 32], initializer=tf.contrib.layers.xavier_initializer())
 		b3 = tf.get_variable(name="b3", shape=[32], initializer=tf.zeros_initializer())
+		
 		w4 = tf.get_variable("w4", shape=[32 * 7 * 7, 625], initializer=tf.contrib.layers.xavier_initializer())
-		w_o = tf.get_variable("w_o", shape=[625, 10], initializer=tf.contrib.layers.xavier_initializer())
 		b4 = tf.get_variable(name="b4", shape=[625], initializer=tf.zeros_initializer())
-
+		
+		w_o = tf.get_variable("w_o", shape=[625, 10], initializer=tf.contrib.layers.xavier_initializer())
+		b5 = tf.get_variable(name="b5", shape=[10], initializer=tf.zeros_initializer())
+		
 		p_keep_conv = tf.placeholder("float")
 		p_keep_hidden = tf.placeholder("float")
-		b5 = tf.get_variable(name="b5", shape=[10], initializer=tf.zeros_initializer())
+		
 		l1a = tf.nn.relu(tf.nn.conv2d(X, w, strides=[1, 1, 1, 1], padding='SAME') + b1)
 		l1 = tf.nn.max_pool(l1a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 		l1 = tf.nn.dropout(l1, p_keep_conv)
 
 		l3a = tf.nn.relu(tf.nn.conv2d(l1, w3, strides=[1, 1, 1, 1], padding='SAME') + b3)
 		l3 = tf.nn.max_pool(l3a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
-		l3 = tf.reshape(l3, [-1, w4.get_shape().as_list()[0]])    # reshape to (?, 2048)
+		#Reshape for matmul
+		l3 = tf.reshape(l3, [-1, w4.get_shape().as_list()[0]])
 		l3 = tf.nn.dropout(l3, p_keep_conv)
 
 		l4 = tf.nn.relu(tf.matmul(l3, w4) + b4)
@@ -92,11 +97,11 @@ class CNN(object):
 		else:
 			f = 'data-all_2_updated.chkp'
 		fn = f + '.meta'
-		s3.download_file(os.environ['S3_BUCKET'], fn, os.path.join('tmp/', fn))
+		s3.download_file('digit_draw_recognize', fn, os.path.join('tmp/', fn))
 		fn = f + '.index'
-		s3.download_file(os.environ['S3_BUCKET'], fn, os.path.join('tmp/', fn))
+		s3.download_file('digit_draw_recognize', fn, os.path.join('tmp/', fn))
 		fn = f + '.data-00000-of-00001'
-		s3.download_file(os.environ['S3_BUCKET'], fn, os.path.join('tmp/', fn))
+		s3.download_file('digit_draw_recognize', fn, os.path.join('tmp/', fn))
 		tf.reset_default_graph()
 		init_op = tf.global_variables_initializer()
 		sess = tf.Session()
@@ -121,7 +126,7 @@ class CNN(object):
 
 		l3a = tf.nn.relu(tf.nn.conv2d(l1, w3, strides=[1, 1, 1, 1], padding='SAME') + b3)
 		l3 = tf.nn.max_pool(l3a, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
-		l3 = tf.reshape(l3, [-1, w4.get_shape().as_list()[0]])    # reshape to (?, 2048)
+		l3 = tf.reshape(l3, [-1, w4.get_shape().as_list()[0]])
 		l3 = tf.nn.dropout(l3, p_keep_conv)
 
 		l4 = tf.nn.relu(tf.matmul(l3, w4) + b4)
