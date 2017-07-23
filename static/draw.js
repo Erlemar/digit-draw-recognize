@@ -278,7 +278,10 @@ function negative_pred() {
 	}
 }
 
-
+function nothing() {
+	document.getElementById("prediction").style.display = "none";
+	document.getElementById("answer_reaction").innerHTML = "Well, the models on this site can recognize only digits... But you can draw anything, if you like :)";
+}
 
 function predict() {
 	document.getElementById("digit_form").style.display = "none";	

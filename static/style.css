@@ -61,3 +61,8 @@ p
     margin: auto;
     display: block;
 }
+
+#not_a_digit
+{
+	width: 150px;
+}

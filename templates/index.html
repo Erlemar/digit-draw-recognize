@@ -112,6 +112,7 @@
 						<span id="question">Is the prediction correct?</span>
 						<button type="button" class="btn btn-default butt" id="yes" onclick="positive_pred()">Yes</button>
 						<button type="button" class="btn btn-default butt" id="no" onclick="negative_pred()">No</button>
+						<button type="button" class="btn btn-default butt" id="not_a_digit" onclick="nothing()">It wasn't a number</button>
 					</div>
 					<span id="answer_reaction"> </span>
 					<div id="digit_form" style="display: none;">
@@ -137,21 +138,14 @@
         <hr>
 
         <div class="row">
-            <div class="col-lg-12">
-                <div class="well">
-                    <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
             <div class="col-md-4">
                 <h2>About the app</h2>
                 <p>This is an app for recognizing drawn digits. Draw a digit on the canvas and press the button "Recognize" to see the prediction. Press button "Clear" to clear the canvas and draw the digit again. Pressing button "Show more information" unhides a table with predictions done by several models.</p>
             </div>
             <div class="col-md-4">
                 <h2>Collecting the data</h2>
-                <p>The drawn image is saved in temporary folder which is emptied after the end of the session. By default the drawn image is used to improve the quality of predictions by models. If you don't want this, uncheck the relevent flag. No more information is collected.</p>
+                <p>The drawn image is saved in temporary folder which is emptied after the end of the session. By default the drawn image is used to improve the quality of predictions by models. If you don't want this, uncheck the flag below. No more information is collected.</p><br>
+                <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>
             </div>
             <div class="col-md-4">
                 <h2>Models performance</h2>
