@@ -282,6 +282,19 @@ function negative_pred() {
 
 function predict() {
 	document.getElementById("digit_form").style.display = "none";	
+	document.getElementById("hidable").style.display = "none";
+	document.getElementById("fnn1").style.color = 'gray';
+	document.getElementById("fnn2").style.color = 'gray';
+	document.getElementById("fnn3").style.color = 'gray';
+	document.getElementById("fnn_t1").style.color = 'gray';
+	document.getElementById("fnn_t2").style.color = 'gray';
+	document.getElementById("fnn_t3").style.color = 'gray';
+	document.getElementById("cnn1").style.color = 'gray';
+	document.getElementById("cnn2").style.color = 'gray';
+	document.getElementById("cnn3").style.color = 'gray';
+	document.getElementById("cnn_t1").style.color = 'gray';
+	document.getElementById("cnn_t2").style.color = 'gray';
+	document.getElementById("cnn_t3").style.color = 'gray';
 	document.getElementById("rec_result").innerHTML = "Predicting...";
 
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide info') {
