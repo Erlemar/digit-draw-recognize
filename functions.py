@@ -204,6 +204,6 @@ class Model(object):
 		top_3 = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3]
 		top_3_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_original]
 		top_3_cnn = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_cnn]
-		top_3_cnn_original = ['{0} ({1})%'.format(i[0], i[1]) for i in top_3_cnn_original]
+		top_3_cnn_original = ['{} ({:2.4})%'.format(i[0], i[1]) for i in top_3_cnn_original]
 		
 		return answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original

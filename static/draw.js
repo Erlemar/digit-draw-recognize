@@ -22,6 +22,7 @@ function start_canvas () {
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup = function (event) {mouseup(event)};
+    canvas.onmouseout = function (event) {mouseup(event)};
     canvas.ontouchstart = function (event) {touchstart(event)};
     canvas.ontouchmove = function (event) {touchmove(event)};
     canvas.ontouchend = function (event) {touchend(event)};
@@ -299,6 +300,7 @@ function predict() {
 	document.getElementById("cnn_t2").style.color = 'gray';
 	document.getElementById("cnn_t3").style.color = 'gray';
 	document.getElementById("rec_result").innerHTML = "Predicting...";
+	document.getElementById("prediction").style.display = "none";
 
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide info') {
 		document.getElementById("hidable").style.display = "block";

@@ -60,7 +60,9 @@
 					<p>This project uses two machine learning models for digit recognition: feedforward neural network written on numpy and convolutional neural network on Tensorflow. These models were inspired by cs231n course. Both were trained on the same dataset of 800 images (drawn by me) which were augmented up to 19200, validation set had 200 images (also drawn by me) and the accuracy of these models was measured by predicting on MNIST test set.</p>
 					
 					<h2>Feed Forward neural net</h2>
-					<p>The structure of model is simple: fully connected layer - ReLU - fully connected layer - softmax. The model is written as a single class, here is the code:</p>
+					<p>The structure of model is simple: </p>
+					<img src = "/static/9.jpg" alt = "FNN architecture"> </img><br>
+					
 					<script src="https://gist.github.com/Erlemar/cb431b88d1d64e163601c68a530b8e9c.js"></script>
 					
 					<h3>Code explanation</h3>
@@ -104,7 +106,8 @@
 					
 					
 					<h2>Convolutional neural net</h2>
-					<p>The structure of model is more complex than in FNN: conv - relu - pool - dropout - conv - relu - pool - dropout - fully connected layer - dropout - fully connected layer. Here is the code:</p>
+					<p>The structure of model is more complex than in FNN:</p>
+					<img src = "/static/10.jpg" alt = "CNN architecture"> </img><br>
 					<script src="https://gist.github.com/Erlemar/9ca303ed987acb85d5bb04c6386ad879.js"></script>
 					
 					<h3>Code explanation</h3>
