@@ -171,6 +171,8 @@ class Model(object):
 		"""
 		Models are trained. Weights on Amazon are updated.
 		"""
+		r = self.save_image(digit, image)
+		print(r)
 		net = FNN(self.params)
 		X, y = self.augment(image, digit)
 		net.train(X, y)
