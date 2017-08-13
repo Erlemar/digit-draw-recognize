@@ -1,3 +1,4 @@
+//for canvas drawing used code from here: https://github.com/zealerww/digits_recognition/blob/master/digits_recognition/static/draw.js
 var drawing = false;
 
 var context;
@@ -96,92 +97,91 @@ function draw() {
     context.fillRect(0, 0, 200, 200);
 }
 
+//Used mozilla docs for this code https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 var ongoingTouches = new Array;
-function handleStart(evt) {
-    
- 
+function handleStart(evt) { 
 
-  var canvas = document.getElementById("the_stage");
-  var context = canvas.getContext("2d");
-  var touches = evt.changedTouches;
-var offset = findPos(canvas);  
+	var canvas = document.getElementById("the_stage");
+	var context = canvas.getContext("2d");
+	var touches = evt.changedTouches;
+	var offset = findPos(canvas);  
     
    
-  for (var i = 0; i < touches.length; i++) {
-      if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
-            evt.preventDefault();
-    ongoingTouches.push(copyTouch(touches[i]));
-    var color = colorForTouch(touches[i]);
-    context.beginPath();
-    context.arc(touches[i].clientX-offset.x, touches[i].clientY-offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
-    context.fillStyle = color;
-    context.fill();
-  }
-  }
+	for (var i = 0; i < touches.length; i++) {
+		if(touches[i].clientX-offset.x >0 && touches[i].clientX - offset.x < parseFloat(canvas.width) && touches[i].clientY - offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
+			evt.preventDefault();
+			ongoingTouches.push(copyTouch(touches[i]));
+			//var color = colorForTouch(touches[i]);
+			context.beginPath();
+			context.arc(touches[i].clientX - offset.x, touches[i].clientY - offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
+			context.fillStyle = "#000000";
+			context.fill();
+		}
+	}
 }
 function handleMove(evt) {
 
-  var canvas = document.getElementById("the_stage");
-  var context = canvas.getContext("2d");
-  var touches = evt.changedTouches;
-  var offset = findPos(canvas);
+	var canvas = document.getElementById("the_stage");
+	var context = canvas.getContext("2d");
+	var touches = evt.changedTouches;
+	var offset = findPos(canvas);
 
-  for (var i = 0; i < touches.length; i++) {
-        if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
+	for (var i = 0; i < touches.length; i++) {
+        if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
               evt.preventDefault();
-      var color = colorForTouch(touches[i]);
-    var idx = ongoingTouchIndexById(touches[i].identifier);
-    
-    if (idx >= 0) {
-      context.beginPath();
-      context.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
-	  
-      context.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
-      context.lineWidth = 4;
-      context.strokeStyle = color;
-      context.stroke();
-      
-      ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
-    } else {
+		  //var color = colorForTouch(touches[i]);
+			var idx = ongoingTouchIndexById(touches[i].identifier);
+		
+			if (idx >= 0) {
+				context.beginPath();
+				context.moveTo(ongoingTouches[idx].clientX - offset.x, ongoingTouches[idx].clientY - offset.y);
+
+				context.lineTo(touches[i].clientX - offset.x, touches[i].clientY - offset.y);
+				context.lineWidth = 4;
+				context.strokeStyle = "#000000";
+				context.stroke();
+
+				ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
+			} else {
+			}
+		}
     }
-  }
-        }
 }
 function handleEnd(evt) {
 
-  var canvas = document.getElementById("the_stage");
-  var context = canvas.getContext("2d");
-  var touches = evt.changedTouches;
-  var offset = findPos(canvas);
+	var canvas = document.getElementById("the_stage");
+	var context = canvas.getContext("2d");
+	var touches = evt.changedTouches;
+	var offset = findPos(canvas);
         
-  for (var i = 0; i < touches.length; i++) {
-              if(touches[i].clientX-offset.x >0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y >0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
-                    evt.preventDefault();
-    var color = colorForTouch(touches[i]);
-    var idx = ongoingTouchIndexById(touches[i].identifier);
-        
-    if (idx >= 0) {
-      context.lineWidth = 4;
-      context.fillStyle = color;
-      context.beginPath();
-      context.moveTo(ongoingTouches[idx].clientX-offset.x, ongoingTouches[idx].clientY-offset.y);
-      context.lineTo(touches[i].clientX-offset.x, touches[i].clientY-offset.y);
-      context.fillRect(touches[i].clientX - 4-offset.x, touches[i].clientY - 4-offset.y, 8, 8); // and a square at the end
-      ongoingTouches.splice(i, 1); // remove it; we're done
-    } else {
+	for (var i = 0; i < touches.length; i++) {
+		if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
+			evt.preventDefault();
+			//var color = colorForTouch(touches[i]);
+			var idx = ongoingTouchIndexById(touches[i].identifier);
+				
+			if (idx >= 0) {
+				context.lineWidth = 4;
+				context.fillStyle = "#000000";
+				context.beginPath();
+				context.moveTo(ongoingTouches[idx].clientX - offset.x, ongoingTouches[idx].clientY - offset.y);
+				context.lineTo(touches[i].clientX - offset.x, touches[i].clientY - offset.y);
+				context.fillRect(touches[i].clientX - 4 -offset.x, touches[i].clientY - 4 - offset.y, 8, 8); // and a square at the end
+				ongoingTouches.splice(i, 1); // remove it; we're done
+				} else {
+			}
+		}
     }
-  }
-        }
 }
 function handleCancel(evt) {
-  evt.preventDefault();
-  var touches = evt.changedTouches;
+	evt.preventDefault();
+	var touches = evt.changedTouches;
   
-  for (var i = 0; i < touches.length; i++) {
-    ongoingTouches.splice(i, 1); // remove it; we're done
-  }
+	for (var i = 0; i < touches.length; i++) {
+		ongoingTouches.splice(i, 1); // remove it; we're done
+	}
 }
-function colorForTouch(touch) {
+/*function colorForTouch(touch) {
   var r = touch.identifier % 16;
   var g = Math.floor(touch.identifier / 3) % 16;
   var b = Math.floor(touch.identifier / 7) % 16;
@@ -190,19 +190,19 @@ function colorForTouch(touch) {
   b = b.toString(16); // make it a hex digit
   var color = "#" + r + g + b;
   return color;
-}
+}*/
 function copyTouch(touch) {
-  return {identifier: touch.identifier,clientX: touch.clientX,clientY: touch.clientY};
+	return {identifier: touch.identifier,clientX: touch.clientX,clientY: touch.clientY};
 }
 function ongoingTouchIndexById(idToFind) {
-  for (var i = 0; i < ongoingTouches.length; i++) {
-    var id = ongoingTouches[i].identifier;
+	for (var i = 0; i < ongoingTouches.length; i++) {
+		var id = ongoingTouches[i].identifier;
     
-    if (id == idToFind) {
-      return i;
-    }
-  }
-  return -1; // not found
+		if (id == idToFind) {
+			return i;
+		}
+	}
+	return -1; // not found
 }
 
 function findPos (obj) {
@@ -215,7 +215,7 @@ function findPos (obj) {
             curtop += obj.offsetTop;
         } while (obj = obj.offsetParent);
 
-        return { x: curleft-document.body.scrollLeft, y: curtop-document.body.scrollTop };
+        return { x: curleft - document.body.scrollLeft, y: curtop - document.body.scrollTop };
     }
 }
 

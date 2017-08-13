@@ -140,11 +140,11 @@
         <div class="row">
             <div class="col-md-4">
                 <h2>About the app</h2>
-                <p>This is an app for recognizing drawn digits. Draw a digit on the canvas and press the button "Recognize" to see the prediction. Press button "Clear" to clear the canvas and draw the digit again. Pressing button "Show more information" unhides a table with predictions done by several models.</p>
+                <p>This app can recognize handwritten digits. Draw a digit on the canvas above and press the "Recognize" button to see a prediction. Press the "Clear" button to clear the canvas and draw a digit again. "Show more information" button reveals detailed predictions by all models.</p>
             </div>
             <div class="col-md-4">
                 <h2>Collecting the data</h2>
-                <p>The drawn image is saved in temporary folder which is emptied after the end of the session. By default the drawn image is used to improve the quality of predictions by models. If you don't want this, uncheck the flag below. No more information is collected.</p><br>
+                <p>The drawn image is saved in a temporary folder which is emptied at the end of each session. By default, the drawn image is used to additionally train models and futher improve the prediction quality. If you don't want this to happen, uncheck the flag below and no information will be collected.</p><br>
                 <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>
             </div>
             <div class="col-md-4">
@@ -165,8 +165,8 @@
 						</tr>
 						<tr>
 							<td>Trained FNN</td>
-							<td id="fnn_t_mnist">63.23%</td>
-							<td id="fnn_t_bad_digit">9 (11.79%)</td>
+							<td id="fnn_t_mnist">62.13%</td>
+							<td id="fnn_t_bad_digit">9 (14.37%)</td>
 						</tr>
 						<tr>
 							<td>TF CNN</td>
@@ -175,8 +175,8 @@
 						</tr>
 						<tr>
 							<td>TF CNN trained</td>
-							<td id="cnn_t_mnist">74.4%</td>
-							<td id="cnn_t_bad_digit">7 (28.11%)</td>
+							<td id="cnn_t_mnist">74.27%</td>
+							<td id="cnn_t_bad_digit">9 (29.44%)</td>
 						</tr>
 						
 					</tbody>
