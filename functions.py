@@ -146,7 +146,10 @@ class Model(object):
 	
 	def predict(self, image):
 		"""
-		Predicting image. If nothing is drawn, returns a message; otherwise 4 models are initialized and they make predictions. They return a list of tuples with 3 top predictions and their probabilities. These lists are sent to "select_answer" method to select the best answer. Also tuples are converted into strings for easier processing in JS. The answer and lists with predictions and probabilities are returned.
+		Predicting image. If nothing is drawn, returns a message; otherwise 4 models are initialized and they make predictions.
+		They return a list of tuples with 3 top predictions and their probabilities. These lists are sent to "select_answer"
+		method to select the best answer. Also tuples are converted into strings for easier processing in JS. The answer and
+		lists with predictions and probabilities are returned.
 		"""
 	
 		img_array = self.process_image(image)

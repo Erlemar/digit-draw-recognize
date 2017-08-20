@@ -111,9 +111,8 @@ function handleStart(evt) {
 		if(touches[i].clientX-offset.x >0 && touches[i].clientX - offset.x < parseFloat(canvas.width) && touches[i].clientY - offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
 			evt.preventDefault();
 			ongoingTouches.push(copyTouch(touches[i]));
-			//var color = colorForTouch(touches[i]);
 			context.beginPath();
-			context.arc(touches[i].clientX - offset.x, touches[i].clientY - offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
+			//context.arc(touches[i].clientX - offset.x, touches[i].clientY - offset.y, 4, 0, 2 * Math.PI, false); // a circle at the start
 			context.fillStyle = "#000000";
 			context.fill();
 		}
@@ -129,7 +128,6 @@ function handleMove(evt) {
 	for (var i = 0; i < touches.length; i++) {
         if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
               evt.preventDefault();
-		  //var color = colorForTouch(touches[i]);
 			var idx = ongoingTouchIndexById(touches[i].identifier);
 		
 			if (idx >= 0) {
@@ -157,7 +155,6 @@ function handleEnd(evt) {
 	for (var i = 0; i < touches.length; i++) {
 		if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
 			evt.preventDefault();
-			//var color = colorForTouch(touches[i]);
 			var idx = ongoingTouchIndexById(touches[i].identifier);
 				
 			if (idx >= 0) {
@@ -166,7 +163,7 @@ function handleEnd(evt) {
 				context.beginPath();
 				context.moveTo(ongoingTouches[idx].clientX - offset.x, ongoingTouches[idx].clientY - offset.y);
 				context.lineTo(touches[i].clientX - offset.x, touches[i].clientY - offset.y);
-				context.fillRect(touches[i].clientX - 4 -offset.x, touches[i].clientY - 4 - offset.y, 8, 8); // and a square at the end
+				//context.fillRect(touches[i].clientX - 4 -offset.x, touches[i].clientY - 4 - offset.y, 8, 8); // and a square at the end
 				ongoingTouches.splice(i, 1); // remove it; we're done
 				} else {
 			}
@@ -181,16 +178,7 @@ function handleCancel(evt) {
 		ongoingTouches.splice(i, 1); // remove it; we're done
 	}
 }
-/*function colorForTouch(touch) {
-  var r = touch.identifier % 16;
-  var g = Math.floor(touch.identifier / 3) % 16;
-  var b = Math.floor(touch.identifier / 7) % 16;
-  r = r.toString(16); // make it a hex digit
-  g = g.toString(16); // make it a hex digit
-  b = b.toString(16); // make it a hex digit
-  var color = "#" + r + g + b;
-  return color;
-}*/
+
 function copyTouch(touch) {
 	return {identifier: touch.identifier,clientX: touch.clientX,clientY: touch.clientY};
 }
@@ -226,6 +214,7 @@ function clearCanvas() {
     document.getElementById("hide_show_btn").style.display = "none";
     document.getElementById("prediction").style.display = "none";
     document.getElementById("hidable").style.display = "none";
+	document.getElementById("digit_form").style.display = "none";
     document.getElementById("answer_reaction").innerHTML = "";
     document.getElementById("rec_result").innerHTML = "";
 	document.getElementById("fnn1").style.color = 'gray';
