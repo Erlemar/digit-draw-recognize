@@ -20,6 +20,7 @@ function startup() {
 function start_canvas () {
     var canvas = document.getElementById("the_stage");
     context = canvas.getContext("2d");
+    //document.getElementById("the_stage").style.display = "none";
     canvas.onmousedown = function (event) {mousedown(event)};
     canvas.onmousemove = function (event) {mousemove(event)};
     canvas.onmouseup = function (event) {mouseup(event)};
@@ -31,7 +32,7 @@ function start_canvas () {
 		offset_left += (o.offsetLeft - o.scrollLeft);
 		offset_top  += (o.offsetTop - o.scrollTop);
     }
-	
+
 	var el =document.body;
 	el.addEventListener("touchstart", handleStart, false);
 	el.addEventListener("touchend", handleEnd, false);
@@ -60,7 +61,7 @@ function getPosition(evt) {
     left -= offset_left;
     top -= offset_top;
 
-    return {x : left, y : top}; 
+    return {x : left, y : top};
 }
 
 
@@ -75,7 +76,7 @@ function mousedown(event) {
 
 
 function mousemove(event) {
-    if (!drawing) 
+    if (!drawing)
         return;
     var location = getPosition(event);
     context.lineTo(location.x, location.y);
@@ -84,7 +85,7 @@ function mousemove(event) {
 
 
 function mouseup(event) {
-    if (!drawing) 
+    if (!drawing)
         return;
     mousemove(event);
 	context.closePath();
@@ -99,14 +100,14 @@ function draw() {
 
 //Used mozilla docs for this code https://developer.mozilla.org/en-US/docs/Web/API/Touch_events
 var ongoingTouches = new Array;
-function handleStart(evt) { 
+function handleStart(evt) {
 
 	var canvas = document.getElementById("the_stage");
 	var context = canvas.getContext("2d");
 	var touches = evt.changedTouches;
-	var offset = findPos(canvas);  
-    
-   
+	var offset = findPos(canvas);
+
+
 	for (var i = 0; i < touches.length; i++) {
 		if(touches[i].clientX-offset.x >0 && touches[i].clientX - offset.x < parseFloat(canvas.width) && touches[i].clientY - offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
 			evt.preventDefault();
@@ -129,7 +130,7 @@ function handleMove(evt) {
         if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY - offset.y < parseFloat(canvas.height)){
               evt.preventDefault();
 			var idx = ongoingTouchIndexById(touches[i].identifier);
-		
+
 			if (idx >= 0) {
 				context.beginPath();
 				context.moveTo(ongoingTouches[idx].clientX - offset.x, ongoingTouches[idx].clientY - offset.y);
@@ -151,12 +152,12 @@ function handleEnd(evt) {
 	var context = canvas.getContext("2d");
 	var touches = evt.changedTouches;
 	var offset = findPos(canvas);
-        
+
 	for (var i = 0; i < touches.length; i++) {
 		if(touches[i].clientX-offset.x > 0 && touches[i].clientX-offset.x < parseFloat(canvas.width) && touches[i].clientY-offset.y > 0 && touches[i].clientY-offset.y < parseFloat(canvas.height)){
 			evt.preventDefault();
 			var idx = ongoingTouchIndexById(touches[i].identifier);
-				
+
 			if (idx >= 0) {
 				context.lineWidth = 4;
 				context.fillStyle = "#000000";
@@ -173,7 +174,7 @@ function handleEnd(evt) {
 function handleCancel(evt) {
 	evt.preventDefault();
 	var touches = evt.changedTouches;
-  
+
 	for (var i = 0; i < touches.length; i++) {
 		ongoingTouches.splice(i, 1); // remove it; we're done
 	}
@@ -185,7 +186,7 @@ function copyTouch(touch) {
 function ongoingTouchIndexById(idToFind) {
 	for (var i = 0; i < ongoingTouches.length; i++) {
 		var id = ongoingTouches[i].identifier;
-    
+
 		if (id == idToFind) {
 			return i;
 		}
@@ -217,19 +218,14 @@ function clearCanvas() {
 	document.getElementById("digit_form").style.display = "none";
     document.getElementById("answer_reaction").innerHTML = "";
     document.getElementById("rec_result").innerHTML = "";
-	document.getElementById("fnn1").style.color = 'gray';
-	document.getElementById("fnn2").style.color = 'gray';
-	document.getElementById("fnn3").style.color = 'gray';
-	document.getElementById("fnn_t1").style.color = 'gray';
-	document.getElementById("fnn_t2").style.color = 'gray';
-	document.getElementById("fnn_t3").style.color = 'gray';
-	document.getElementById("cnn1").style.color = 'gray';
-	document.getElementById("cnn2").style.color = 'gray';
-	document.getElementById("cnn3").style.color = 'gray';
-	document.getElementById("cnn_t1").style.color = 'gray';
-	document.getElementById("cnn_t2").style.color = 'gray';
-	document.getElementById("cnn_t3").style.color = 'gray';
-}
+	document.getElementById("a1").style.color = 'gray';
+	document.getElementById("a2").style.color = 'gray';
+	document.getElementById("a3").style.color = 'gray';
+	document.getElementById("a4").style.color = 'gray';
+	document.getElementById("a5").style.color = 'gray';
+	document.getElementById("a6").style.color = 'gray';
+	document.getElementById("a7").style.color = 'gray';
+	document.getElementById("a8").style.color = 'gray';a1}
 
 //button events
 function hide_show() {
@@ -261,7 +257,7 @@ function negative_pred() {
 	if (document.getElementById("Checkbox").checked == true) {
 		document.getElementById("answer_reaction").innerHTML = "This was an error! Could you please choose the correct number and submit it?";
 		document.getElementById("prediction").style.display = "none";
-		document.getElementById("digit_form").style.display = "block";	
+		document.getElementById("digit_form").style.display = "block";
 	} else {
 		document.getElementById("answer_reaction").innerHTML = "A pity :( If only the models could use this image to correct the error...";
 		document.getElementById("prediction").style.display = "none";
@@ -274,20 +270,16 @@ function nothing() {
 }
 
 function predict() {
-	document.getElementById("digit_form").style.display = "none";	
+	document.getElementById("digit_form").style.display = "none";
 	document.getElementById("hidable").style.display = "none";
-	document.getElementById("fnn1").style.color = 'gray';
-	document.getElementById("fnn2").style.color = 'gray';
-	document.getElementById("fnn3").style.color = 'gray';
-	document.getElementById("fnn_t1").style.color = 'gray';
-	document.getElementById("fnn_t2").style.color = 'gray';
-	document.getElementById("fnn_t3").style.color = 'gray';
-	document.getElementById("cnn1").style.color = 'gray';
-	document.getElementById("cnn2").style.color = 'gray';
-	document.getElementById("cnn3").style.color = 'gray';
-	document.getElementById("cnn_t1").style.color = 'gray';
-	document.getElementById("cnn_t2").style.color = 'gray';
-	document.getElementById("cnn_t3").style.color = 'gray';
+	document.getElementById("a1").style.color = 'gray';
+	document.getElementById("a2").style.color = 'gray';
+	document.getElementById("a3").style.color = 'gray';
+	document.getElementById("a4").style.color = 'gray';
+	document.getElementById("a5").style.color = 'gray';
+	document.getElementById("a6").style.color = 'gray';
+	document.getElementById("a7").style.color = 'gray';
+	document.getElementById("a8").style.color = 'gray';
 	document.getElementById("rec_result").innerHTML = "Predicting...";
 	document.getElementById("prediction").style.display = "none";
 
@@ -295,15 +287,16 @@ function predict() {
 		document.getElementById("hidable").style.display = "block";
 	} else {
 		document.getElementById("hidable").style.display = "none";
-	}	
+	}
 	var canvas = document.getElementById("the_stage");
 	var dataURL = canvas.toDataURL('image/jpg');
-	
+	var t = document.getElementById("text").value;
+
 	$.ajax({
 		type: "POST",
 		url: "/hook2",
 		data:{
-			imageBase64: dataURL
+			text_data: t
 		}
 	}).done(function(response) {
 		console.log(response)
@@ -318,35 +311,27 @@ function predict() {
 			document.getElementById("prediction").style.display = "block";
 			document.getElementById("hide_show_btn").style.display = 'block';
 			document.getElementById("answer_reaction").innerHTML = "";
-			var response = JSON.parse(response)
+			var response = JSON.parse(response);
 			//answer, top_3, top_3_original, top_3_cnn, top_3_cnn_original
-			
-			document.getElementById("fnn1").style.color = 'black';
-			document.getElementById("fnn2").style.color = 'black';
-			document.getElementById("fnn3").style.color = 'black';
-			document.getElementById("fnn_t1").style.color = 'black';
-			document.getElementById("fnn_t2").style.color = 'black';
-			document.getElementById("fnn_t3").style.color = 'black';
-			document.getElementById("cnn1").style.color = 'black';
-			document.getElementById("cnn2").style.color = 'black';
-			document.getElementById("cnn3").style.color = 'black';
-			document.getElementById("cnn_t1").style.color = 'black';
-			document.getElementById("cnn_t2").style.color = 'black';
-			document.getElementById("cnn_t3").style.color = 'black';
-			
-			document.getElementById("fnn1").innerHTML = response['fnn'][0];
-			document.getElementById("fnn2").innerHTML = response['fnn'][1];
-			document.getElementById("fnn3").innerHTML = response['fnn'][2];
-			document.getElementById("fnn_t1").innerHTML = response['fnn_t'][0];
-			document.getElementById("fnn_t2").innerHTML = response['fnn_t'][1];
-			document.getElementById("fnn_t3").innerHTML = response['fnn_t'][2];
-			document.getElementById("cnn1").innerHTML = response['cnn'][0];
-			document.getElementById("cnn2").innerHTML = response['cnn'][1];
-			document.getElementById("cnn3").innerHTML = response['cnn'][2];
-			document.getElementById("cnn_t1").innerHTML = response['cnn_t'][0];
-			document.getElementById("cnn_t2").innerHTML = response['cnn_t'][1];
-			document.getElementById("cnn_t3").innerHTML = response['cnn_t'][2];	
-			document.getElementById("rec_result").innerHTML = response["answer"];
+
+			document.getElementById("a1").style.color = 'black';
+			document.getElementById("a2").style.color = 'black';
+			document.getElementById("a3").style.color = 'black';
+			document.getElementById("a4").style.color = 'black';
+			document.getElementById("a5").style.color = 'black';
+			document.getElementById("a6").style.color = 'black';
+			document.getElementById("a7").style.color = 'black';
+			document.getElementById("a8").style.color = 'black';
+
+			document.getElementById("a1").innerHTML = response['channel'];
+			document.getElementById("a2").innerHTML = response['id'];
+			document.getElementById("a3").innerHTML = response['full_text'];
+			document.getElementById("a4").innerHTML = response['agents'];
+			document.getElementById("a5").innerHTML = response['master'];
+			document.getElementById("a6").innerHTML = response['date_created'];
+			document.getElementById("a7").innerHTML = response['date_transfer'];
+			document.getElementById("a8").innerHTML = response['region'];
+			document.getElementById("rec_result").innerHTML = response['found_count'];
 		}
 	});
 }

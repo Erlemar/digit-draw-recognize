@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Handwritten digit recognition</title>
+    <title>Админка</title>
 	<!--<form action="{{ url_for('index_page') }}" method=post>-->
     <link href="static/bootstrap.min.css" rel="stylesheet">
 
@@ -53,11 +53,43 @@
     </nav>
 
     <div class="container">
+		      <!--<form action = "http://localhost:5000/" method = post>-->
+         <!--<fieldset>-->
+            <!--<legend>Contact Form</legend>-->
+            <!--{{ form.hidden_tag() }}-->
+
+            <!--<div style = font-size:20px; font-weight:bold; margin-left:150px;>-->
+               <!--{{ form.name.label }}<br>-->
+               <!--{{ form.name }}-->
+               <!--<br>-->
+
+               <!--{{ form.Gender.label }} {{ form.Gender }}-->
+               <!--{{ form.Address.label }}<br>-->
+               <!--{{ form.Address }}-->
+               <!--<br>-->
+
+               <!--{{ form.email.label }}<br>-->
+               <!--{{ form.email }}-->
+               <!--<br>-->
+
+               <!--{{ form.Age.label }}<br>-->
+               <!--{{ form.Age }}-->
+               <!--<br>-->
+
+               <!--{{ form.language.label }}<br>-->
+               <!--{{ form.language }}-->
+               <!--<br>-->
+               <!--{{ form.submit }}-->
+            <!--</div>-->
+
+         <!--</fieldset>-->
+      <!--</form>-->
 
         <div class="row clearfix">
             <div class="col-md-3" align="center">
 				<div style="position: relative;">
-					<canvas id="the_stage" width="200" height="200" align="center">Canvas</canvas><br>
+					<!--<canvas id="the_stage" width="200" height="200" align="center">Canvas</canvas><br>-->
+					<textarea id="text" name="text" rows="8" cols="40"></textarea></textarea>
 					</div>
 				<div style="position: relative;">
 					<button type="button" class="btn btn-default butt" onclick="clearCanvas()" align="center">Clear</button>
@@ -67,7 +99,7 @@
 
             <div class="col-md-7">
 				<div class="row" id="pr">
-					<div class="col-md-8"><span id="pred_text">Prediction result:</span> <span id="rec_result"> </span></div>
+					<div class="col-md-8"><span id="pred_text">Количество найденных инцидентов:</span> <span id="rec_result"> </span></div>
 					<div class="col-md-4"><button type="button" class="btn btn-default butt" onclick="hide_show()" id="hide_show_btn" style="display: none;">Show info</button></div>
 				</div>
 				<div class="container" id="hidable" style="display: none;">
@@ -76,32 +108,27 @@
 							<table class="table">
 								<thead>
 									<tr>
-										<th>FNN</th>
-										<th>Trained FNN</th>
-										<th>TF CNN</th>
-										<th>TF CNN trained</th>
+										<th>Канал</th>
+										<th>ID</th>
+										<th>Текст</th>
+										<th>Агенты</th>
+										<th>Руководитель</th>
+										<th>Время создания инцидента</th>
+										<th>Дата переадресации</th>
+										<th>Регион</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
-										<td id="fnn1"> </td>
-										<td id="fnn_t1"> </td>
-										<td id="cnn1"> </td>
-										<td id="cnn_t1"> </td>
+										<td id="a1"> </td>
+										<td id="a2"> </td>
+										<td id="a3"> </td>
+										<td id="a4"> </td>
+										<td id="a5"> </td>
+										<td id="a6"> </td>
+										<td id="a7"> </td>
+										<td id="a8"> </td>
 									</tr>
-									<tr>
-										<td id="fnn2"> </td>
-										<td id="fnn_t2"> </td>
-										<td id="cnn2"> </td>
-										<td id="cnn_t2"> </td>
-									</tr>
-									<tr>
-										<td id="fnn3"> </td>
-										<td id="fnn_t3"> </td>
-										<td id="cnn3"> </td>
-										<td id="cnn_t3"> </td>
-									</tr>
-									
 								</tbody>
 							</table>
 						</div>
@@ -137,52 +164,52 @@
 
         <hr>
 
-        <div class="row">
-            <div class="col-md-4">
-                <h2>About the app</h2>
-                <p>This app can recognize handwritten digits. Draw a digit on the canvas above and press the "Recognize" button to see a prediction. Press the "Clear" button to clear the canvas and draw a digit again. "Show more information" button reveals detailed predictions by all models.</p>
-            </div>
-            <div class="col-md-4">
-                <h2>Collecting the data</h2>
-                <p>The drawn image is saved in a temporary folder which is emptied at the end of each session. By default, the drawn image is used to additionally train models and futher improve the prediction quality. If you don't want this to happen, uncheck the flag below and no information will be collected.</p><br>
-                <label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>
-            </div>
-            <div class="col-md-4">
-                <h2>Models performance</h2>
-                <table class="table">
-					<thead>
-						<tr>
-							<th>Model</th>
-							<th>MNIST accuracy</th>
-							<th>Worst predicted digit</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td>FNN</td>
-							<td id="fnn_mnist">58.95%</td>
-							<td id="fnn_bad_digit">9 (14.57%)</td>
-						</tr>
-						<tr>
-							<td>Trained FNN</td>
-							<td id="fnn_t_mnist">62.13%</td>
-							<td id="fnn_t_bad_digit">9 (14.37%)</td>
-						</tr>
-						<tr>
-							<td>TF CNN</td>
-							<td id="cnn_mnist">74.69%</td>
-							<td id="cnn_bad_digit">7 (25.97%)</td>
-						</tr>
-						<tr>
-							<td>TF CNN trained</td>
-							<td id="cnn_t_mnist">74.27%</td>
-							<td id="cnn_t_bad_digit">9 (29.44%)</td>
-						</tr>
-						
-					</tbody>
-				</table>
-            </div>
-        </div>
+        <!--<div class="row">-->
+            <!--<div class="col-md-4">-->
+                <!--<h2>About the app</h2>-->
+                <!--<p>This app can recognize handwritten digits. Draw a digit on the canvas above and press the "Recognize" button to see a prediction. Press the "Clear" button to clear the canvas and draw a digit again. "Show more information" button reveals detailed predictions by all models.</p>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+                <!--<h2>Collecting the data</h2>-->
+                <!--<p>The drawn image is saved in a temporary folder which is emptied at the end of each session. By default, the drawn image is used to additionally train models and futher improve the prediction quality. If you don't want this to happen, uncheck the flag below and no information will be collected.</p><br>-->
+                <!--<label><input id="Checkbox" name="Checkbox" type="checkbox" checked="checked">Allow to use the drawn digit for model training</label>-->
+            <!--</div>-->
+            <!--<div class="col-md-4">-->
+                <!--<h2>Models performance</h2>-->
+                <!--<table class="table">-->
+					<!--<thead>-->
+						<!--<tr>-->
+							<!--<th>Model</th>-->
+							<!--<th>MNIST accuracy</th>-->
+							<!--<th>Worst predicted digit</th>-->
+						<!--</tr>-->
+					<!--</thead>-->
+					<!--<tbody>-->
+						<!--<tr>-->
+							<!--<td>FNN</td>-->
+							<!--<td id="fnn_mnist">58.95%</td>-->
+							<!--<td id="fnn_bad_digit">9 (14.57%)</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>Trained FNN</td>-->
+							<!--<td id="fnn_t_mnist">62.13%</td>-->
+							<!--<td id="fnn_t_bad_digit">9 (14.37%)</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>TF CNN</td>-->
+							<!--<td id="cnn_mnist">74.69%</td>-->
+							<!--<td id="cnn_bad_digit">7 (25.97%)</td>-->
+						<!--</tr>-->
+						<!--<tr>-->
+							<!--<td>TF CNN trained</td>-->
+							<!--<td id="cnn_t_mnist">74.27%</td>-->
+							<!--<td id="cnn_t_bad_digit">9 (29.44%)</td>-->
+						<!--</tr>-->
+						<!---->
+					<!--</tbody>-->
+				<!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
 
         <footer>
             <div class="row">
