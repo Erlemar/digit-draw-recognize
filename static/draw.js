@@ -270,26 +270,26 @@ function nothing() {
 }
 
 function predict() {
-//	document.getElementById("digit_form").style.display = "none";
-//	document.getElementById("hidable").style.display = "none";
-//	document.getElementById("a1").style.color = 'gray';
-//	document.getElementById("a2").style.color = 'gray';
-//	document.getElementById("a3").style.color = 'gray';
-//	document.getElementById("a4").style.color = 'gray';
-//	document.getElementById("a5").style.color = 'gray';
-//	document.getElementById("a6").style.color = 'gray';
-//	document.getElementById("a7").style.color = 'gray';
-//	document.getElementById("a8").style.color = 'gray';
+	document.getElementById("digit_form").style.display = "none";
+	document.getElementById("hidable").style.display = "none";
+	document.getElementById("a1").style.color = 'gray';
+	document.getElementById("a2").style.color = 'gray';
+	document.getElementById("a3").style.color = 'gray';
+	document.getElementById("a4").style.color = 'gray';
+	document.getElementById("a5").style.color = 'gray';
+	document.getElementById("a6").style.color = 'gray';
+	document.getElementById("a7").style.color = 'gray';
+	document.getElementById("a8").style.color = 'gray';
 	document.getElementById("rec_result").innerHTML = "Predicting...";
-//	document.getElementById("prediction").style.display = "none";
+	document.getElementById("prediction").style.display = "none";
 
 	if (document.getElementById("hide_show_btn").innerHTML == 'Hide info') {
 		document.getElementById("hidable").style.display = "block";
 	} else {
 		document.getElementById("hidable").style.display = "none";
 	}
-	// var canvas = document.getElementById("the_stage");
-	// var dataURL = canvas.toDataURL('image/jpg');
+	var canvas = document.getElementById("the_stage");
+	var dataURL = canvas.toDataURL('image/jpg');
 	var t = document.getElementById("text").value;
 
 	$.ajax({
@@ -367,7 +367,7 @@ function train_model(digit) {
 }
 
 
-// onload = start_canvas;
+onload = start_canvas;
 
 // https://stackoverflow.com/questions/16057256/draw-on-a-canvas-via-mouse-and-touch
 // https://bencentra.com/code/2014/12/05/html5-canvas-touch-events.html
