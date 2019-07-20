@@ -1,14 +1,14 @@
 boto3
 boto
-Flask==0.12.2
+Flask==1.0.0
 Flask-Cors==3.0.2
-gunicorn==19.0.0
+gunicorn==19.5.0
 Jinja2
 numexpr==2.6.2
 numpy==1.12.1
 oauthlib==1.0.3
 Pillow==4.1.1
-requests==2.14.2
+requests==2.20.0
 requests-file==1.4.1
 requests-oauthlib==0.6.1
 scikit-image
