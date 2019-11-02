@@ -7,7 +7,7 @@ Jinja2
 numexpr==2.6.2
 numpy==1.12.1
 oauthlib==1.0.3
-Pillow==4.1.1
+Pillow==6.2.0
 requests==2.20.0
 requests-file==1.4.1
 requests-oauthlib==0.6.1
