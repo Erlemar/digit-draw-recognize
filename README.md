@@ -6,3 +6,7 @@ The site works on desktop and mobile.
 You can find descriptions of the models and the project itself on the site.
 
 [Link](https://digits-draw-recognize.herokuapp.com/)
+
+
+This is an old repo: tensorflow model starts breaking (can't load updated checkpoints due to problems with hash), here is a newer version in Pytorch:
+https://github.com/Erlemar/digit-draw-predict
