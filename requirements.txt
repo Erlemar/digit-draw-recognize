@@ -1,7 +1,7 @@
 boto3
 boto
 Flask==1.0.0
-Flask-Cors==3.0.2
+Flask-Cors==3.0.9
 gunicorn==19.5.0
 Jinja2
 numexpr==2.6.2
